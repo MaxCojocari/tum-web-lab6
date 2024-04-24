@@ -1,7 +1,11 @@
-import "./App.css";
+import ButtonUsage from "./components/ButtonUsage";
 
 function App() {
-  return <div>Hello World!</div>;
+  return (
+    <div>
+      <ButtonUsage />
+    </div>
+  );
 }
 
 export default App;
