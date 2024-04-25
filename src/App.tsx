@@ -1,9 +1,9 @@
-import ButtonUsage from "./components/ButtonUsage";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <div>
-      <ButtonUsage />
+      <Navbar />
     </div>
   );
 }
