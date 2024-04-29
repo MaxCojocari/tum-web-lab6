@@ -1,6 +1,7 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 
 export default function BrandLogo() {
+  const theme = useTheme();
   return (
     <Box
       sx={{
@@ -22,7 +23,7 @@ export default function BrandLogo() {
           fontWeight: 700,
           fontStyle: "normal",
           fontSize: "18px",
-          color: "#545be8",
+          color: theme.palette.mode === "light" ? "#545be8" : "text.primary",
         }}
       >
         CourseMe
