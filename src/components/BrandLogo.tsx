@@ -11,7 +11,7 @@ export default function BrandLogo() {
     >
       <Box
         component="img"
-        sx={{ width: 30, height: "auto" }}
+        sx={{ width: 35, height: "auto" }}
         alt="CourseMe Logo"
         src="logo.svg"
       />
