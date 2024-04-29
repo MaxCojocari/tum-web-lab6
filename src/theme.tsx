@@ -9,4 +9,5 @@ export const theme = createTheme({
       main: "#f0c932",
     },
   },
+  shadows: undefined,
 });
