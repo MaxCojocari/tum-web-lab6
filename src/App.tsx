@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import {
   Box,
   createTheme,
+  CssBaseline,
   PaletteMode,
   Shadows,
   ThemeOptions,
@@ -39,6 +40,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Box bgcolor={"background.default"} color={"text.primary"}>
         <Navbar setMode={setMode} mode={mode} />
       </Box>
