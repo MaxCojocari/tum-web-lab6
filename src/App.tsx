@@ -4,12 +4,18 @@ import {
   Box,
   createTheme,
   CssBaseline,
+  Grid,
   PaletteMode,
+  Paper,
   Shadows,
+  Stack,
+  styled,
   ThemeOptions,
   ThemeProvider,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
+import { Sidebar } from "./components/Sidebar";
+import CoursesList from "./components/CoursesList";
 
 function App() {
   const [mode, setMode] = useState<"light" | "dark">("light");
@@ -20,7 +26,7 @@ function App() {
       ...(mode === "light"
         ? {
             background: {
-              default: "#fff",
+              default: "#f5f5f5",
               paper: grey[600],
             },
             primary: {
@@ -41,8 +47,16 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box bgcolor={"background.default"} color={"text.primary"}>
+      <Box>
         <Navbar setMode={setMode} mode={mode} />
+        <Grid container spacing={2} sx={{ padding: "90px 90px 0px 90px" }}>
+          <Grid item xs={3}>
+            <Sidebar />
+          </Grid>
+          <Grid item xs={9}>
+            <CoursesList />
+          </Grid>
+        </Grid>
       </Box>
     </ThemeProvider>
   );
