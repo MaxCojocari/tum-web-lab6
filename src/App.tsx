@@ -6,10 +6,7 @@ import {
   CssBaseline,
   Grid,
   PaletteMode,
-  Paper,
   Shadows,
-  Stack,
-  styled,
   ThemeOptions,
   ThemeProvider,
 } from "@mui/material";
