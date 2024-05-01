@@ -105,7 +105,7 @@ export default function CourseCard({ id }: { id: number }) {
           padding: "0 16px 16px 16px",
         }}
       >
-        <BuyButton />
+        <BuyButton inCart={false} />
         <Box
           sx={{
             "& > *": {
