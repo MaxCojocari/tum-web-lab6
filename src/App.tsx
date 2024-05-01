@@ -15,6 +15,7 @@ import {
 import { grey } from "@mui/material/colors";
 import { Sidebar } from "./components/Sidebar";
 import CoursesList from "./components/CoursesList";
+import Footer from "./components/Footer";
 
 function App() {
   const [mode, setMode] = useState<"light" | "dark">("light");
@@ -80,6 +81,7 @@ function App() {
             <CoursesList />
           </Grid>
         </Grid>
+        <Footer />
       </Box>
     </ThemeProvider>
   );
