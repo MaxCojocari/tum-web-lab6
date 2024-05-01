@@ -1,7 +1,7 @@
 import { styled, Button, ButtonProps } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface StyledButtonProps extends ButtonProps {
   inCart: boolean;

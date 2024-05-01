@@ -40,6 +40,7 @@ export default function CourseCard({ id }: { id: number }) {
         <Typography
           variant="h6"
           sx={{
+            fontFamily: "Poppins, sans-serif",
             position: "absolute",
             right: "10px",
             bottom: "5px",
@@ -83,7 +84,13 @@ export default function CourseCard({ id }: { id: number }) {
           >
             HTML & CSS
           </Typography>
-          <Typography sx={{ fontSize: "12.64px", color: "#545be8" }}>
+          <Typography
+            sx={{
+              fontFamily: "Poppins, sans-serif",
+              fontSize: "12.64px",
+              color: "#545be8",
+            }}
+          >
             1,500 Views
           </Typography>
         </Box>
