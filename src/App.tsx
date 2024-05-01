@@ -1,22 +1,15 @@
 import { useMemo, useState } from "react";
-import Navbar from "./components/Navbar";
 import {
-  Box,
   createTheme,
   CssBaseline,
-  Grid,
   PaletteMode,
   Shadows,
   ThemeOptions,
   ThemeProvider,
-  Typography,
-  useMediaQuery,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { Sidebar } from "./components/Sidebar";
-import CoursesList from "./components/CoursesList";
-import Footer from "./components/Footer";
 import PageBlueprint from "./components/PageBlueprint";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
   const [mode, setMode] = useState<"light" | "dark">("light");
@@ -58,7 +51,26 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <PageBlueprint mode={mode} setMode={setMode} pageName={"Home"} />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <PageBlueprint mode={mode} setMode={setMode} pageName="Home" />
+          }
+        />
+        <Route
+          path="/favorite"
+          element={
+            <PageBlueprint mode={mode} setMode={setMode} pageName="Favorite" />
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <PageBlueprint mode={mode} setMode={setMode} pageName="Cart" />
+          }
+        />
+      </Routes>
     </ThemeProvider>
   );
 }
