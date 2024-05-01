@@ -29,7 +29,7 @@ export default function PageBlueprint({ mode, setMode, pageName }: any) {
           >
             {pageName}
           </Typography>
-          <CoursesList />
+          <CoursesList pageName={pageName} />
         </Grid>
       </Grid>
       <Footer />
