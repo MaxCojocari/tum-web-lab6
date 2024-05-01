@@ -9,6 +9,7 @@ import {
   Shadows,
   ThemeOptions,
   ThemeProvider,
+  Typography,
   useMediaQuery,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
@@ -64,6 +65,18 @@ function App() {
             <Sidebar />
           </Grid>
           <Grid item xs={12 - columns}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontFamily: "Poppins, sans-serif",
+                fontWeight: "bold",
+                fontSize: "40px",
+                color: theme.palette.mode === "light" ? "#141e32" : "#fff",
+                margin: "-16px 0 20px 0",
+              }}
+            >
+              Home
+            </Typography>
             <CoursesList />
           </Grid>
         </Grid>
