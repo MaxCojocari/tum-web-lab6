@@ -43,6 +43,7 @@ export default function CoursesList({ pageName }: { pageName: string }) {
         {courses?.map((course, index) => (
           <Grid item xs={columns} key={index}>
             <CourseCard
+              pageName={pageName}
               courseInfo={course}
               isBuyCard={pageName === "Home"}
               onItemRemoved={handleItemRemoved}

@@ -11,11 +11,9 @@ import {
 } from "@mui/material";
 import BuyButton from "./BuyButton";
 import ShareIcon from "@mui/icons-material/Share";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { useState } from "react";
 import RemoveButton from "./RemoveButton";
 import { Course } from "../types";
+import FavoriteButton from "./FavoriteButton";
 
 const StyledCard = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -26,16 +24,17 @@ const StyledCard = styled(Paper)(({ theme }) => ({
 }));
 
 export default function CourseCard({
+  pageName,
   isBuyCard,
   courseInfo,
   onItemRemoved,
 }: {
+  pageName: string;
   isBuyCard: boolean;
   courseInfo: Course;
   onItemRemoved: () => void;
 }) {
   const theme = useTheme();
-  const [isFavoriteClicked, setFavoriteClicked] = useState(false);
 
   const BuyActions = () => (
     <CardActions
@@ -53,25 +52,7 @@ export default function CourseCard({
           },
         }}
       >
-        <IconButton
-          aria-label="add to favorites"
-          onClick={(e) => setFavoriteClicked(!isFavoriteClicked)}
-          disableRipple
-          sx={{
-            padding: 0,
-            marginRight: "10px",
-            "& > *": {
-              fontSize: "35px",
-              color: theme.palette.action.disabled,
-            },
-          }}
-        >
-          {isFavoriteClicked === true ? (
-            <FavoriteIcon />
-          ) : (
-            <FavoriteBorderIcon />
-          )}
-        </IconButton>
+        <FavoriteButton parentCourseId={courseInfo.id} />
         <IconButton aria-label="share" disableRipple sx={{ padding: 0 }}>
           <ShareIcon
             sx={{ fontSize: "35px", color: theme.palette.action.disabled }}
@@ -90,6 +71,7 @@ export default function CourseCard({
       }}
     >
       <RemoveButton
+        pageName={pageName}
         parentCourseId={courseInfo.id}
         onItemRemoved={onItemRemoved}
       />
