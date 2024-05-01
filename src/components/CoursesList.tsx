@@ -13,7 +13,7 @@ export default function CoursesList({ pageName }: { pageName: string }) {
     if (pageName.toLowerCase() === "home") {
       setCourses(COURSES);
     } else {
-      const storedIds = localStorage.getItem(`${pageName.toLowerCase()}_id`);
+      const storedIds = localStorage.getItem(`${pageName.toLowerCase()}`);
       if (storedIds) {
         const courseIds = JSON.parse(storedIds);
         const filteredCourses = courseIds
