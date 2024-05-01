@@ -14,6 +14,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useState } from "react";
+import RemoveButton from "./RemoveButton";
 
 const StyledCard = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -23,9 +24,71 @@ const StyledCard = styled(Paper)(({ theme }) => ({
   boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.15)",
 }));
 
-export default function CourseCard({ id }: { id: number }) {
+export default function CourseCard({
+  id,
+  isBuyCard,
+}: {
+  id: number;
+  isBuyCard: boolean;
+}) {
   const theme = useTheme();
   const [isFavoriteClicked, setFavoriteClicked] = useState(false);
+
+  const BuyActions = () => (
+    <CardActions
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        padding: "0 16px 16px 16px",
+      }}
+    >
+      <BuyButton inCart={false} />
+      <Box
+        sx={{
+          "& > *": {
+            padding: 0,
+          },
+        }}
+      >
+        <IconButton
+          aria-label="add to favorites"
+          onClick={(e) => setFavoriteClicked(!isFavoriteClicked)}
+          disableRipple
+          sx={{
+            padding: 0,
+            marginRight: "10px",
+            "& > *": {
+              fontSize: "35px",
+              color: theme.palette.action.disabled,
+            },
+          }}
+        >
+          {isFavoriteClicked === true ? (
+            <FavoriteIcon />
+          ) : (
+            <FavoriteBorderIcon />
+          )}
+        </IconButton>
+        <IconButton aria-label="share" disableRipple sx={{ padding: 0 }}>
+          <ShareIcon
+            sx={{ fontSize: "35px", color: theme.palette.action.disabled }}
+          />
+        </IconButton>
+      </Box>
+    </CardActions>
+  );
+
+  const RemoveAction = () => (
+    <CardActions
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        padding: "0 16px 16px 16px",
+      }}
+    >
+      <RemoveButton />
+    </CardActions>
+  );
 
   return (
     <StyledCard>
@@ -105,47 +168,7 @@ export default function CourseCard({ id }: { id: number }) {
           </Typography>
         </Box>
       </CardContent>
-      <CardActions
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "0 16px 16px 16px",
-        }}
-      >
-        <BuyButton inCart={false} />
-        <Box
-          sx={{
-            "& > *": {
-              padding: 0,
-            },
-          }}
-        >
-          <IconButton
-            aria-label="add to favorites"
-            onClick={(e) => setFavoriteClicked(!isFavoriteClicked)}
-            disableRipple
-            sx={{
-              padding: 0,
-              marginRight: "10px",
-              "& > *": {
-                fontSize: "35px",
-                color: theme.palette.action.disabled,
-              },
-            }}
-          >
-            {isFavoriteClicked === true ? (
-              <FavoriteIcon />
-            ) : (
-              <FavoriteBorderIcon />
-            )}
-          </IconButton>
-          <IconButton aria-label="share" disableRipple sx={{ padding: 0 }}>
-            <ShareIcon
-              sx={{ fontSize: "35px", color: theme.palette.action.disabled }}
-            />
-          </IconButton>
-        </Box>
-      </CardActions>
+      {isBuyCard ? <BuyActions /> : <RemoveAction />}
     </StyledCard>
   );
 }
