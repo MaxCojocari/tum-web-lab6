@@ -8,6 +8,12 @@ export default function ThemeToggle({ setMode, mode }: any) {
     <IconButton
       onClick={(e) => setMode(mode === "light" ? "dark" : "light")}
       color="inherit"
+      sx={{
+        padding: 0,
+        "& > *": {
+          fontSize: "30px",
+        },
+      }}
     >
       {theme.palette.mode === "dark" ? (
         <Brightness7Icon />

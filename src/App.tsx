@@ -38,6 +38,16 @@ function App() {
         : {}),
     },
     shadows: Array(25).fill("none") as Shadows,
+    typography: {
+      fontFamily: [
+        "Nunito",
+        "Roboto",
+        '"Helvetica Neue"',
+        "Arial",
+        "sans-serif",
+        "Poppins",
+      ].join(","),
+    },
   });
 
   const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);

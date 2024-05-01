@@ -56,7 +56,7 @@ export default function Navbar({ setMode, mode }: any) {
           <AccountCircle
             sx={{
               color: "action.active",
-              fontSize: "40px",
+              fontSize: "30px",
               cursor: "pointer",
             }}
           />

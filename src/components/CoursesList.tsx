@@ -8,9 +8,9 @@ export default function CoursesList() {
   return (
     <Box sx={{ flexGrow: 1, paddingRight: "16px" }}>
       <Grid container spacing={{ xs: 2, md: 3 }}>
-        {Array.from(Array(6)).map((_, index) => (
+        {Array.from(Array(12)).map((_, index) => (
           <Grid item xs={columns} key={index}>
-            <CourseCard />
+            <CourseCard id={(index % 4) + 1} />
           </Grid>
         ))}
       </Grid>
