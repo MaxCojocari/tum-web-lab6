@@ -38,7 +38,7 @@ export default function Navbar({ setMode, mode }: any) {
   return (
     <AppBar position="sticky" sx={{ bgcolor: "background.primary" }}>
       <StyledToolbar>
-        <BrandLogo />
+        <BrandLogo color={"#545be8"} />
         <CustomSearch>
           <Search sx={{ color: "action.active", cursor: "pointer" }} />
           <InputBase placeholder="Search..." />
