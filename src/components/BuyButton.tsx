@@ -41,7 +41,6 @@ export default function BuyButton({
     ids.sort((a: number, b: number) => a - b);
     localStorage.setItem("cart", JSON.stringify(ids));
     setClicked(!clicked);
-    console.log("localStorage", localStorage.getItem("cart"));
   }
 
   useEffect(() => {

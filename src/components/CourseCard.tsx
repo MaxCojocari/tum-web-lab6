@@ -28,10 +28,11 @@ const StyledCard = styled(Paper)(({ theme }) => ({
 export default function CourseCard({
   isBuyCard,
   courseInfo,
+  onItemRemoved,
 }: {
-  id: number;
   isBuyCard: boolean;
   courseInfo: Course;
+  onItemRemoved: () => void;
 }) {
   const theme = useTheme();
   const [isFavoriteClicked, setFavoriteClicked] = useState(false);
@@ -88,7 +89,10 @@ export default function CourseCard({
         padding: "0 16px 16px 16px",
       }}
     >
-      <RemoveButton />
+      <RemoveButton
+        parentCourseId={courseInfo.id}
+        onItemRemoved={onItemRemoved}
+      />
     </CardActions>
   );
 

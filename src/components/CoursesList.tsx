@@ -26,9 +26,16 @@ export default function CoursesList({ pageName }: { pageName: string }) {
     }
   }, [pageName]);
 
-  useEffect(() => {
-    console.log("Courses updated:", courses);
-  }, [courses]);
+  function handleItemRemoved() {
+    const cartContentIds = localStorage.getItem(pageName.toLowerCase());
+    const ids = cartContentIds ? JSON.parse(cartContentIds) : [];
+    const filteredCourses = ids
+      .map((id: number) => COURSES.find((course) => course.id === id))
+      .filter((course: Course) => course !== undefined);
+    setCourses(filteredCourses);
+  }
+
+  useEffect(() => {}, [courses, pageName]);
 
   return (
     <Box sx={{ flexGrow: 1, paddingRight: "16px" }}>
@@ -36,9 +43,9 @@ export default function CoursesList({ pageName }: { pageName: string }) {
         {courses?.map((course, index) => (
           <Grid item xs={columns} key={index}>
             <CourseCard
-              id={course?.id}
               courseInfo={course}
               isBuyCard={pageName === "Home"}
+              onItemRemoved={handleItemRemoved}
             />
           </Grid>
         ))}
