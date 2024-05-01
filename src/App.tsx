@@ -16,6 +16,7 @@ import { grey } from "@mui/material/colors";
 import { Sidebar } from "./components/Sidebar";
 import CoursesList from "./components/CoursesList";
 import Footer from "./components/Footer";
+import PageBlueprint from "./components/PageBlueprint";
 
 function App() {
   const [mode, setMode] = useState<"light" | "dark">("light");
@@ -53,36 +54,11 @@ function App() {
   });
 
   const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
-  const isNarrowScreen = useMediaQuery("(max-width:1200px)");
-  const columns = isNarrowScreen ? 4 : 3;
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box>
-        <Navbar setMode={setMode} mode={mode} />
-        <Grid container spacing={3} sx={{ padding: "90px 90px 0px 90px" }}>
-          <Grid item xs={columns}>
-            <Sidebar />
-          </Grid>
-          <Grid item xs={12 - columns}>
-            <Typography
-              variant="h6"
-              sx={{
-                fontFamily: "Poppins, sans-serif",
-                fontWeight: "bold",
-                fontSize: "40px",
-                color: theme.palette.mode === "light" ? "#141e32" : "#fff",
-                margin: "-16px 0 20px 0",
-              }}
-            >
-              Home
-            </Typography>
-            <CoursesList />
-          </Grid>
-        </Grid>
-        <Footer />
-      </Box>
+      <PageBlueprint mode={mode} setMode={setMode} pageName={"Home"} />
     </ThemeProvider>
   );
 }
