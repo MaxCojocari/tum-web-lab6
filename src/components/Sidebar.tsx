@@ -5,11 +5,9 @@ import {
   Collapse,
   List,
   ListItemButton,
-  ListItemIcon,
   ListItemText,
   Paper,
   Typography,
-  useTheme,
 } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import HomeIcon from "@mui/icons-material/Home";
