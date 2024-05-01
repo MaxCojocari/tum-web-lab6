@@ -15,6 +15,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import Checkbox from "@mui/material/Checkbox";
+import { useNavigate } from "react-router-dom";
 
 const StyledSidebar = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -32,13 +33,14 @@ const label = { inputProps: { "aria-label": "Checkbox Filter" } };
 
 export function Sidebar() {
   const [open, setOpen] = useState(true);
+  const navigate = useNavigate();
 
   const handleClick = () => {
     setOpen(!open);
   };
 
-  const NavigateButton = ({ Icon, name }: any) => (
-    <ListItemButton>
+  const NavigateButton = ({ Icon, name, to }: any) => (
+    <ListItemButton onClick={() => navigate(to)}>
       <Icon sx={{ marginRight: "15px" }} />
       <ListItemText primary={name} />
     </ListItemButton>
@@ -71,9 +73,17 @@ export function Sidebar() {
   return (
     <>
       <StyledSidebar>
-        <NavigateButton Icon={HomeIcon} name={"Home"} />
-        <NavigateButton Icon={FavoriteBorderIcon} name={"Favorite"} />
-        <NavigateButton Icon={ShoppingCartCheckoutIcon} name={"Cart"} />
+        <NavigateButton Icon={HomeIcon} name={"Home"} to="/" />
+        <NavigateButton
+          Icon={FavoriteBorderIcon}
+          name={"Favorite"}
+          to="/favorite"
+        />
+        <NavigateButton
+          Icon={ShoppingCartCheckoutIcon}
+          name={"Cart"}
+          to="/cart"
+        />
         <ListItemButton onClick={handleClick}>
           <FilterAltIcon sx={{ marginRight: "15px" }} />
           <ListItemText primary="Filter Courses" />
