@@ -1,7 +1,7 @@
 import { styled, Button, ButtonProps } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface StyledButtonProps extends ButtonProps {
   startIcon: any;
@@ -43,6 +43,12 @@ export default function BuyButton({
     setClicked(!clicked);
     console.log("localStorage", localStorage.getItem("cart"));
   }
+
+  useEffect(() => {
+    const cartContentIds = localStorage.getItem("cart");
+    let ids = cartContentIds ? JSON.parse(cartContentIds) : [];
+    if (ids.includes(parentCourseId)) setClicked(true);
+  }, [parentCourseId]);
 
   return (
     <StyledButton
