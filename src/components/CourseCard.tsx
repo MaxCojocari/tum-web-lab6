@@ -8,7 +8,7 @@ import {
 
 export default function CourseCard() {
   return (
-    <Card sx={{ minWidth: 275 }}>
+    <Card>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           Word of the Day

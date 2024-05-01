@@ -9,6 +9,7 @@ import {
   Shadows,
   ThemeOptions,
   ThemeProvider,
+  useMediaQuery,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { Sidebar } from "./components/Sidebar";
@@ -40,17 +41,19 @@ function App() {
   });
 
   const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
+  const isNarrowScreen = useMediaQuery("(max-width:1200px)");
+  const columns = isNarrowScreen ? 4 : 3;
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Box>
         <Navbar setMode={setMode} mode={mode} />
-        <Grid container spacing={2} sx={{ padding: "90px 90px 0px 90px" }}>
-          <Grid item xs={3}>
+        <Grid container spacing={3} sx={{ padding: "90px 90px 0px 90px" }}>
+          <Grid item xs={columns}>
             <Sidebar />
           </Grid>
-          <Grid item xs={9}>
+          <Grid item xs={12 - columns}>
             <CoursesList />
           </Grid>
         </Grid>

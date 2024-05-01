@@ -1,19 +1,19 @@
-import { Grid } from "@mui/material";
+import { Box, Grid, useMediaQuery } from "@mui/material";
 import CourseCard from "./CourseCard";
 
 export default function CoursesList() {
+  const isNarrowScreen = useMediaQuery("(max-width:1200px)");
+  const columns = isNarrowScreen ? 6 : 4;
+
   return (
-    <Grid
-      container
-      spacing={{ xs: 2, md: 3 }}
-      columns={{ xs: 4, sm: 8, md: 12 }}
-      sx={{ paddingRight: "16px", paddingLeft: "10px" }}
-    >
-      {Array.from(Array(12)).map((_, index) => (
-        <Grid item xs={2} sm={4} md={4} key={index}>
-          <CourseCard />
-        </Grid>
-      ))}
-    </Grid>
+    <Box sx={{ flexGrow: 1, paddingRight: "16px" }}>
+      <Grid container spacing={{ xs: 2, md: 3 }}>
+        {Array.from(Array(6)).map((_, index) => (
+          <Grid item xs={columns} key={index}>
+            <CourseCard />
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
   );
 }
