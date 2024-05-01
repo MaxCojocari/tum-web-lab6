@@ -4,6 +4,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useState } from "react";
 
 interface StyledButtonProps extends ButtonProps {
+  startIcon: any;
   inCart: boolean;
 }
 
@@ -21,19 +22,36 @@ const StyledButton = styled(Button)<StyledButtonProps>(
   })
 );
 
-export default function BuyButton({ inCart }: { inCart: boolean }) {
-  const [clicked, setClicked] = useState(inCart);
-  const isAlreadyInCart = inCart || clicked;
+export default function BuyButton({
+  parentCourseId,
+}: {
+  parentCourseId: number;
+}) {
+  const [clicked, setClicked] = useState(false);
+
+  function addToCart() {
+    const cartContentIds = localStorage.getItem("cart");
+    let ids = cartContentIds ? JSON.parse(cartContentIds) : [];
+
+    if (!clicked) {
+      ids.push(parentCourseId);
+    } else {
+      ids = ids.filter((item: number) => item !== parentCourseId);
+    }
+    ids.sort((a: number, b: number) => a - b);
+    localStorage.setItem("cart", JSON.stringify(ids));
+    setClicked(!clicked);
+    console.log("localStorage", localStorage.getItem("cart"));
+  }
+
   return (
     <StyledButton
       variant="contained"
-      onClick={(e) => setClicked(!clicked)}
-      startIcon={
-        isAlreadyInCart ? <ShoppingCartIcon /> : <AddShoppingCartIcon />
-      }
-      inCart={isAlreadyInCart}
+      onClick={addToCart}
+      startIcon={clicked ? <ShoppingCartIcon /> : <AddShoppingCartIcon />}
+      inCart={clicked}
     >
-      {isAlreadyInCart ? "IN CART" : "BUY"}
+      {clicked ? "IN CART" : "BUY"}
     </StyledButton>
   );
 }

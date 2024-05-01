@@ -26,7 +26,6 @@ const StyledCard = styled(Paper)(({ theme }) => ({
 }));
 
 export default function CourseCard({
-  id,
   isBuyCard,
   courseInfo,
 }: {
@@ -45,7 +44,7 @@ export default function CourseCard({
         padding: "0 16px 16px 16px",
       }}
     >
-      <BuyButton inCart={false} />
+      <BuyButton parentCourseId={courseInfo.id} />
       <Box
         sx={{
           "& > *": {
