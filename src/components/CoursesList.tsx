@@ -4,27 +4,41 @@ import CourseCard from "./CourseCard";
 import { Course } from "../types";
 import { COURSES } from "../database";
 
-export default function CoursesList({ pageName }: { pageName: string }) {
+interface CoursesListProps {
+  pageName: string;
+  sortCriteria: {
+    price: boolean;
+    popularity: boolean;
+  };
+}
+
+function sortCourses(
+  courses: Course[],
+  sortCriteria: { price: boolean; popularity: boolean }
+): Course[] {
+  if (sortCriteria.price && sortCriteria.popularity) {
+    return [...courses].sort((a, b) => {
+      if (a.price !== b.price) {
+        return b.price - a.price;
+      }
+      return b.views - a.views;
+    });
+  } else if (sortCriteria.price) {
+    return [...courses].sort((a, b) => b.price - a.price);
+  } else if (sortCriteria.popularity) {
+    return [...courses].sort((a, b) => b.views - a.views);
+  } else {
+    return courses;
+  }
+}
+
+export default function CoursesList({
+  pageName,
+  sortCriteria,
+}: CoursesListProps) {
   const [courses, setCourses] = useState<Course[]>([]);
   const isNarrowScreen = useMediaQuery("(max-width:1200px)");
   const columns = isNarrowScreen ? 6 : 4;
-
-  useEffect(() => {
-    if (pageName.toLowerCase() === "home") {
-      setCourses(COURSES);
-    } else {
-      const storedIds = localStorage.getItem(`${pageName.toLowerCase()}`);
-      if (storedIds) {
-        const courseIds = JSON.parse(storedIds);
-        const filteredCourses = courseIds
-          .map((id: number) => COURSES.find((course) => course.id === id))
-          .filter((course: Course) => course !== undefined);
-        setCourses(filteredCourses);
-      } else {
-        setCourses([]);
-      }
-    }
-  }, [pageName]);
 
   function handleItemRemoved() {
     const cartContentIds = localStorage.getItem(pageName.toLowerCase());
@@ -35,7 +49,23 @@ export default function CoursesList({ pageName }: { pageName: string }) {
     setCourses(filteredCourses);
   }
 
-  useEffect(() => {}, [courses, pageName]);
+  useEffect(() => {
+    if (pageName.toLowerCase() === "home") {
+      setCourses(sortCourses(COURSES, sortCriteria));
+    } else {
+      const storedIds = localStorage.getItem(pageName.toLowerCase());
+      if (storedIds) {
+        const courseIds = JSON.parse(storedIds);
+        const filteredCourses = courseIds
+          .map((id: number) => COURSES.find((course) => course.id === id))
+          .filter((course: Course) => course !== undefined);
+        setCourses(sortCourses(filteredCourses, sortCriteria));
+      } else {
+        setCourses([]);
+      }
+    }
+    console.log("CHANGED");
+  }, [pageName, sortCriteria]);
 
   return (
     <Box sx={{ flexGrow: 1, paddingRight: "16px" }}>

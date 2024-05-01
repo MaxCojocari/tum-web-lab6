@@ -3,18 +3,45 @@ import Footer from "./Footer";
 import Navbar from "./Navbar";
 import { Sidebar } from "./Sidebar";
 import CoursesList from "./CoursesList";
+import { useState } from "react";
+
+interface SortCriteria {
+  price: boolean;
+  popularity: boolean;
+}
 
 export default function PageBlueprint({ mode, setMode, pageName }: any) {
   const theme = useTheme();
   const isNarrowScreen = useMediaQuery("(max-width:1200px)");
   const columns = isNarrowScreen ? 4 : 3;
+  const [sortCriteria, setSortCriteria] = useState<SortCriteria>({
+    price: false,
+    popularity: false,
+  });
+
+  function handlePriceCheckboxChange(isChecked: boolean) {
+    setSortCriteria((prevCriteria) => ({
+      ...prevCriteria,
+      price: isChecked,
+    }));
+  }
+
+  function handlePopularityCheckboxChange(isChecked: boolean) {
+    setSortCriteria((prevCriteria) => ({
+      ...prevCriteria,
+      popularity: isChecked,
+    }));
+  }
 
   return (
     <Box>
       <Navbar setMode={setMode} mode={mode} />
       <Grid container spacing={3} sx={{ padding: "90px 90px 0px 90px" }}>
         <Grid item xs={columns}>
-          <Sidebar />
+          <Sidebar
+            onPriceCheckboxChange={handlePriceCheckboxChange}
+            onPopularityCheckboxChange={handlePopularityCheckboxChange}
+          />
         </Grid>
         <Grid item xs={12 - columns}>
           <Typography
@@ -29,7 +56,7 @@ export default function PageBlueprint({ mode, setMode, pageName }: any) {
           >
             {pageName}
           </Typography>
-          <CoursesList pageName={pageName} />
+          <CoursesList pageName={pageName} sortCriteria={sortCriteria} />
         </Grid>
       </Grid>
       <Footer />

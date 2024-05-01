@@ -1,21 +1,19 @@
 import { styled } from "@mui/material/styles";
 import { useState } from "react";
 import {
-  Box,
   Collapse,
   List,
   ListItemButton,
   ListItemText,
   Paper,
-  Typography,
 } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import HomeIcon from "@mui/icons-material/Home";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
-import Checkbox from "@mui/material/Checkbox";
 import { useNavigate } from "react-router-dom";
+import CheckboxFilter from "./CheckboxFilter";
 
 const StyledSidebar = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -29,45 +27,21 @@ const StyledSidebar = styled(Paper)(({ theme }) => ({
   borderRadius: "6px",
 }));
 
-const label = { inputProps: { "aria-label": "Checkbox Filter" } };
-
-export function Sidebar() {
+export function Sidebar({
+  onPriceCheckboxChange,
+  onPopularityCheckboxChange,
+}: {
+  onPriceCheckboxChange: (isChecked: boolean) => void;
+  onPopularityCheckboxChange: (isChecked: boolean) => void;
+}) {
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
-
-  const handleClick = () => {
-    setOpen(!open);
-  };
 
   const NavigateButton = ({ Icon, name, to }: any) => (
     <ListItemButton onClick={() => navigate(to)}>
       <Icon sx={{ marginRight: "15px" }} />
       <ListItemText primary={name} />
     </ListItemButton>
-  );
-
-  const CheckboxFilter = ({ text }: { text: string }) => (
-    <Box
-      sx={{
-        display: "flex",
-        alignContent: "center",
-      }}
-    >
-      <Checkbox
-        {...label}
-        sx={{
-          color: "#545be8",
-          "&.Mui-checked": {
-            color: "#545be8",
-          },
-        }}
-      />
-      <Typography
-        sx={{ display: "flex", alignItems: "center", fontWeight: "300" }}
-      >
-        {text}
-      </Typography>
-    </Box>
   );
 
   return (
@@ -84,7 +58,7 @@ export function Sidebar() {
           name={"Cart"}
           to="/cart"
         />
-        <ListItemButton onClick={handleClick}>
+        <ListItemButton onClick={(e) => setOpen(!open)}>
           <FilterAltIcon sx={{ marginRight: "15px" }} />
           <ListItemText primary="Filter Courses" />
           {open ? <ExpandLess /> : <ExpandMore />}
@@ -95,8 +69,11 @@ export function Sidebar() {
             disablePadding
             sx={{ margin: "0 20px 10px 20px" }}
           >
-            <CheckboxFilter text="Price" />
-            <CheckboxFilter text="Popularity" />
+            <CheckboxFilter text="Price" onCheckboxChange={onPriceCheckboxChange} />
+            <CheckboxFilter
+              text="Popularity"
+              onCheckboxChange={onPopularityCheckboxChange}
+            />
           </List>
         </Collapse>
       </StyledSidebar>
