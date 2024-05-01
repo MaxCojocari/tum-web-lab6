@@ -15,6 +15,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useState } from "react";
 import RemoveButton from "./RemoveButton";
+import { Course } from "../types";
 
 const StyledCard = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -27,9 +28,11 @@ const StyledCard = styled(Paper)(({ theme }) => ({
 export default function CourseCard({
   id,
   isBuyCard,
+  courseInfo,
 }: {
   id: number;
   isBuyCard: boolean;
+  courseInfo: Course;
 }) {
   const theme = useTheme();
   const [isFavoriteClicked, setFavoriteClicked] = useState(false);
@@ -96,7 +99,7 @@ export default function CourseCard({
         <CardMedia
           component="img"
           height="200px"
-          image={`/course-${id.toString()}.png`}
+          image={`/${courseInfo?.img_id}.png`}
           alt="Course Image"
           sx={{ borderRadius: "10px 10px 0 0" }}
         ></CardMedia>
@@ -113,7 +116,7 @@ export default function CourseCard({
             zIndex: 100,
           }}
         >
-          $ 20 USD
+          $ {courseInfo?.price} USD
         </Typography>
         <Box
           sx={{
@@ -131,7 +134,7 @@ export default function CourseCard({
           sx={{
             display: "flex",
             flexDirection: "row",
-            alignItems: "center",
+            alignContent: "flex-start",
             justifyContent: "space-between",
             marginBottom: "15px",
           }}
@@ -142,29 +145,32 @@ export default function CourseCard({
               fontFamily: "Poppins, sans-serif",
               fontWeight: "bold",
               fontSize: "21.67px",
+              lineHeight: "28px",
               color: theme.palette.mode === "light" ? "#141e32" : "#fff",
+              maxWidth: "200px",
             }}
           >
-            HTML & CSS
+            {courseInfo?.name}
           </Typography>
           <Typography
             sx={{
               fontFamily: "Poppins, sans-serif",
               fontSize: "12.64px",
               color: "#545be8",
+              marginTop: "4px",
             }}
           >
-            1,500 Views
+            {courseInfo?.views.toLocaleString()} Views
           </Typography>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "row" }}>
           <Typography
             sx={{ marginRight: "10px", fontSize: "16.25px", color: "#969696" }}
           >
-            120 Videos
+            {courseInfo?.nr_videos} Videos
           </Typography>
           <Typography sx={{ fontSize: "16.25px", color: "#969696" }}>
-            2 Teachers
+            {courseInfo?.nr_teachers} Teachers
           </Typography>
         </Box>
       </CardContent>
