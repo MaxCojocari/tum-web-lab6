@@ -1,11 +1,11 @@
-import { Box, Grid, Typography, useMediaQuery } from "@mui/material";
+import { Box, Grid, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 import { Sidebar } from "./Sidebar";
-import { theme } from "../theme";
 import CoursesList from "./CoursesList";
 
 export default function PageBlueprint({ mode, setMode, pageName }: any) {
+  const theme = useTheme();
   const isNarrowScreen = useMediaQuery("(max-width:1200px)");
   const columns = isNarrowScreen ? 4 : 3;
 
