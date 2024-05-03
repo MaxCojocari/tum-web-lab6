@@ -1,40 +1,27 @@
 import { IconButton, useTheme } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function FavoriteButton({
-  parentCourseId,
+  courseId,
+  onFavoriteButtonClicked,
 }: {
-  parentCourseId: number;
+  courseId: number;
+  onFavoriteButtonClicked: (courseId: number, clicked: boolean) => void;
 }) {
   const theme = useTheme();
   const [clicked, setClicked] = useState(false);
 
-  function addToFavorite() {
-    const cartContentIds = localStorage.getItem("favorite");
-    let ids = cartContentIds ? JSON.parse(cartContentIds) : [];
-
-    if (!clicked) {
-      ids.push(parentCourseId);
-    } else {
-      ids = ids.filter((item: number) => item !== parentCourseId);
-    }
-    ids.sort((a: number, b: number) => a - b);
-    localStorage.setItem("favorite", JSON.stringify(ids));
+  function handleClick() {
     setClicked(!clicked);
+    onFavoriteButtonClicked(courseId, !clicked);
   }
-
-  useEffect(() => {
-    const favoriteContentIds = localStorage.getItem("favorite");
-    let ids = favoriteContentIds ? JSON.parse(favoriteContentIds) : [];
-    if (ids.includes(parentCourseId)) setClicked(true);
-  }, [parentCourseId]);
 
   return (
     <IconButton
       aria-label="add to favorites"
-      onClick={addToFavorite}
+      onClick={handleClick}
       disableRipple
       sx={{
         padding: 0,

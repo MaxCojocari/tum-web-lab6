@@ -25,14 +25,16 @@ const StyledCard = styled(Paper)(({ theme }) => ({
 
 export default function CourseCard({
   pageName,
-  isBuyCard,
   courseInfo,
   onItemRemoved,
+  onBuyButtonClicked,
+  onFavoriteButtonClicked,
 }: {
   pageName: string;
-  isBuyCard: boolean;
   courseInfo: Course;
-  onItemRemoved: () => void;
+  onItemRemoved: (pageName: string, courseId: number) => void;
+  onBuyButtonClicked: (courseId: number, clicked: boolean) => void;
+  onFavoriteButtonClicked: (courseId: number, clicked: boolean) => void;
 }) {
   const theme = useTheme();
 
@@ -44,7 +46,10 @@ export default function CourseCard({
         padding: "0 16px 16px 16px",
       }}
     >
-      <BuyButton parentCourseId={courseInfo.id} />
+      <BuyButton
+        courseId={courseInfo.id}
+        onBuyButtonClicked={onBuyButtonClicked}
+      />
       <Box
         sx={{
           "& > *": {
@@ -52,7 +57,10 @@ export default function CourseCard({
           },
         }}
       >
-        <FavoriteButton parentCourseId={courseInfo.id} />
+        <FavoriteButton
+          courseId={courseInfo.id}
+          onFavoriteButtonClicked={onFavoriteButtonClicked}
+        />
         <IconButton aria-label="share" disableRipple sx={{ padding: 0 }}>
           <ShareIcon
             sx={{ fontSize: "35px", color: theme.palette.action.disabled }}
@@ -72,7 +80,7 @@ export default function CourseCard({
     >
       <RemoveButton
         pageName={pageName}
-        parentCourseId={courseInfo.id}
+        courseId={courseInfo.id}
         onItemRemoved={onItemRemoved}
       />
     </CardActions>
@@ -145,7 +153,7 @@ export default function CourseCard({
               marginTop: "4px",
             }}
           >
-            {courseInfo?.views.toLocaleString()} Views
+            {courseInfo?.views?.toLocaleString()} Views
           </Typography>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -159,7 +167,7 @@ export default function CourseCard({
           </Typography>
         </Box>
       </CardContent>
-      {isBuyCard ? <BuyActions /> : <RemoveAction />}
+      {pageName.toLowerCase() === "home" ? <BuyActions /> : <RemoveAction />}
     </StyledCard>
   );
 }

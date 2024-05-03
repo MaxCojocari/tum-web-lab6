@@ -1,7 +1,7 @@
 import { styled, Button, ButtonProps } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface StyledButtonProps extends ButtonProps {
   startIcon: any;
@@ -23,36 +23,23 @@ const StyledButton = styled(Button)<StyledButtonProps>(
 );
 
 export default function BuyButton({
-  parentCourseId,
+  courseId,
+  onBuyButtonClicked,
 }: {
-  parentCourseId: number;
+  courseId: number;
+  onBuyButtonClicked: (courseId: number, clicked: boolean) => void;
 }) {
   const [clicked, setClicked] = useState(false);
 
-  function addToCart() {
-    const cartContentIds = localStorage.getItem("cart");
-    let ids = cartContentIds ? JSON.parse(cartContentIds) : [];
-
-    if (!clicked) {
-      ids.push(parentCourseId);
-    } else {
-      ids = ids.filter((item: number) => item !== parentCourseId);
-    }
-    ids.sort((a: number, b: number) => a - b);
-    localStorage.setItem("cart", JSON.stringify(ids));
+  function handleClick() {
     setClicked(!clicked);
+    onBuyButtonClicked(courseId, !clicked);
   }
-
-  useEffect(() => {
-    const cartContentIds = localStorage.getItem("cart");
-    let ids = cartContentIds ? JSON.parse(cartContentIds) : [];
-    if (ids.includes(parentCourseId)) setClicked(true);
-  }, [parentCourseId]);
 
   return (
     <StyledButton
       variant="contained"
-      onClick={addToCart}
+      onClick={handleClick}
       startIcon={clicked ? <ShoppingCartIcon /> : <AddShoppingCartIcon />}
       inCart={clicked}
     >
