@@ -12,9 +12,26 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Favorite from "./pages/Favorite";
 import Cart from "./pages/Cart";
+import React from "react";
+
+interface AppContextType {
+  cart: number[];
+  favorite: number[];
+  setCart: React.Dispatch<React.SetStateAction<number[]>>;
+  setFavorite: React.Dispatch<React.SetStateAction<number[]>>;
+}
+
+export const AppContext = React.createContext<AppContextType>({
+  cart: [],
+  favorite: [],
+  setCart: () => {},
+  setFavorite: () => {},
+});
 
 function App() {
   const [mode, setMode] = useState<"light" | "dark">("light");
+  const [cart, setCart] = useState<number[]>([]);
+  const [favorite, setFavorite] = useState<number[]>([]);
 
   const getDesignTokens = (mode: PaletteMode): ThemeOptions => ({
     palette: {
@@ -53,19 +70,21 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Routes>
-        <Route path="/" element={<Home mode={mode} setMode={setMode} />} />
-        <Route
-          path="/favorite"
-          element={
-            <Favorite mode={mode} setMode={setMode} pageName="Favorite" />
-          }
-        />
-        <Route
-          path="/cart"
-          element={<Cart mode={mode} setMode={setMode} pageName="Cart" />}
-        />
-      </Routes>
+      <AppContext.Provider value={{ cart, favorite, setCart, setFavorite }}>
+        <Routes>
+          <Route path="/" element={<Home mode={mode} setMode={setMode} />} />
+          <Route
+            path="/favorite"
+            element={
+              <Favorite mode={mode} setMode={setMode} pageName="Favorite" />
+            }
+          />
+          <Route
+            path="/cart"
+            element={<Cart mode={mode} setMode={setMode} pageName="Cart" />}
+          />
+        </Routes>
+      </AppContext.Provider>
     </ThemeProvider>
   );
 }

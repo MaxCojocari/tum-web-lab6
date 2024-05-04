@@ -1,5 +1,5 @@
 import { Box, Grid, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { COURSES } from "../database";
 import { Course, SortCriteria } from "../types";
 import CoursesList from "../components/CoursesList";
@@ -8,6 +8,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { Sidebar } from "../components/Sidebar";
 import { FAVORITE_LABEL } from "../constants";
+import { AppContext } from "../App";
 
 export default function Favorite({ mode, setMode }: any) {
   const theme = useTheme();
@@ -19,7 +20,7 @@ export default function Favorite({ mode, setMode }: any) {
     price: false,
     popularity: false,
   });
-  const [favorite, setFavorite] = useState<number[]>([]);
+  const { cart, favorite, setFavorite } = useContext(AppContext);
 
   function handlePriceCheckboxChange(isChecked: boolean) {
     setSortCriteria((prevCriteria) => ({
@@ -46,6 +47,7 @@ export default function Favorite({ mode, setMode }: any) {
   useEffect(() => {
     const storedIds = localStorage.getItem(FAVORITE_LABEL);
     setFavorite(storedIds ? JSON.parse(storedIds) : []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -65,6 +67,8 @@ export default function Favorite({ mode, setMode }: any) {
       <Grid container spacing={3} sx={{ padding: "90px 90px 0px 90px" }}>
         <Grid item xs={columns}>
           <Sidebar
+            nrItemsCart={cart?.length}
+            nrItemsFavorite={favorite?.length}
             onPriceCheckboxChange={handlePriceCheckboxChange}
             onPopularityCheckboxChange={handlePopularityCheckboxChange}
           />

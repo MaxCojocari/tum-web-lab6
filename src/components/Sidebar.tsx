@@ -1,6 +1,7 @@
 import { styled } from "@mui/material/styles";
 import { useState } from "react";
 import {
+  Badge,
   Collapse,
   List,
   ListItemButton,
@@ -28,36 +29,51 @@ const StyledSidebar = styled(Paper)(({ theme }) => ({
 }));
 
 export function Sidebar({
+  nrItemsCart,
+  nrItemsFavorite,
   onPriceCheckboxChange,
   onPopularityCheckboxChange,
 }: {
+  nrItemsCart: number;
+  nrItemsFavorite: number;
   onPriceCheckboxChange: (isChecked: boolean) => void;
   onPopularityCheckboxChange: (isChecked: boolean) => void;
 }) {
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
 
-  const NavigateButton = ({ Icon, name, to }: any) => (
+  const CartButton = ({ to, nrItems }: any) => (
     <ListItemButton onClick={() => navigate(to)}>
-      <Icon sx={{ marginRight: "15px" }} />
-      <ListItemText primary={name} />
+      <Badge badgeContent={nrItems} color="error" sx={{ marginRight: "15px" }}>
+        <ShoppingCartCheckoutIcon />
+      </Badge>
+
+      <ListItemText primary={"Cart"} />
+    </ListItemButton>
+  );
+
+  const FavoriteButton = ({ to, nrItems }: any) => (
+    <ListItemButton onClick={() => navigate(to)}>
+      <Badge badgeContent={nrItems} color="error" sx={{ marginRight: "15px" }}>
+        <FavoriteBorderIcon />
+      </Badge>
+      <ListItemText primary={"Favorite"} />
+    </ListItemButton>
+  );
+
+  const HomeButton = ({ to }: any) => (
+    <ListItemButton onClick={() => navigate(to)}>
+      <HomeIcon sx={{ marginRight: "15px" }} />
+      <ListItemText primary={"Home"} />
     </ListItemButton>
   );
 
   return (
     <>
       <StyledSidebar>
-        <NavigateButton Icon={HomeIcon} name={"Home"} to="/" />
-        <NavigateButton
-          Icon={FavoriteBorderIcon}
-          name={"Favorite"}
-          to="/favorite"
-        />
-        <NavigateButton
-          Icon={ShoppingCartCheckoutIcon}
-          name={"Cart"}
-          to="/cart"
-        />
+        <HomeButton to="/" />
+        <FavoriteButton to="/favorite" nrItems={nrItemsFavorite} />
+        <CartButton to="/cart" nrItems={nrItemsCart} />
         <ListItemButton onClick={(e) => setOpen(!open)}>
           <FilterAltIcon sx={{ marginRight: "15px" }} />
           <ListItemText primary="Filter Courses" />
@@ -69,7 +85,10 @@ export function Sidebar({
             disablePadding
             sx={{ margin: "0 20px 10px 20px" }}
           >
-            <CheckboxFilter text="Price" onCheckboxChange={onPriceCheckboxChange} />
+            <CheckboxFilter
+              text="Price"
+              onCheckboxChange={onPriceCheckboxChange}
+            />
             <CheckboxFilter
               text="Popularity"
               onCheckboxChange={onPopularityCheckboxChange}

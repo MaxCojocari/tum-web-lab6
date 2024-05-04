@@ -3,12 +3,13 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { Sidebar } from "../components/Sidebar";
 import CoursesList from "../components/CoursesList";
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { Course, SortCriteria } from "../types";
 import { COURSES } from "../database";
 import React from "react";
 import { sortCourses } from "../utils";
 import { CART_LABEL, FAVORITE_LABEL } from "../constants";
+import { AppContext } from "../App";
 
 interface CourseContextType {
   cart: number[];
@@ -34,8 +35,7 @@ export default function Home({ mode, setMode }: any) {
     price: false,
     popularity: false,
   });
-  const [favorite, setFavorite] = useState<number[]>([]);
-  const [cart, setCart] = useState<number[]>([]);
+  const { cart, favorite, setCart, setFavorite } = useContext(AppContext);
 
   function handlePriceCheckboxChange(isChecked: boolean) {
     setSortCriteria((prevCriteria) => ({
@@ -83,6 +83,7 @@ export default function Home({ mode, setMode }: any) {
     setCourses(COURSES);
     setCart(cartIds);
     setFavorite(favoriteIds);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -114,6 +115,8 @@ export default function Home({ mode, setMode }: any) {
         <Grid container spacing={3} sx={{ padding: "90px 90px 0px 90px" }}>
           <Grid item xs={columns}>
             <Sidebar
+              nrItemsCart={cart?.length}
+              nrItemsFavorite={favorite?.length}
               onPriceCheckboxChange={handlePriceCheckboxChange}
               onPopularityCheckboxChange={handlePopularityCheckboxChange}
             />
