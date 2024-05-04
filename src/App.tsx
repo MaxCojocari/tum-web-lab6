@@ -8,8 +8,10 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import PageBlueprint from "./components/PageBlueprint";
 import { Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import Favorite from "./pages/Favorite";
+import Cart from "./pages/Cart";
 
 function App() {
   const [mode, setMode] = useState<"light" | "dark">("light");
@@ -52,23 +54,16 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <PageBlueprint mode={mode} setMode={setMode} pageName="Home" />
-          }
-        />
+        <Route path="/" element={<Home mode={mode} setMode={setMode} />} />
         <Route
           path="/favorite"
           element={
-            <PageBlueprint mode={mode} setMode={setMode} pageName="Favorite" />
+            <Favorite mode={mode} setMode={setMode} pageName="Favorite" />
           }
         />
         <Route
           path="/cart"
-          element={
-            <PageBlueprint mode={mode} setMode={setMode} pageName="Cart" />
-          }
+          element={<Cart mode={mode} setMode={setMode} pageName="Cart" />}
         />
       </Routes>
     </ThemeProvider>

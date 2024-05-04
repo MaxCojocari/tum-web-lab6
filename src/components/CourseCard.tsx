@@ -27,14 +27,10 @@ export default function CourseCard({
   pageName,
   courseInfo,
   onItemRemoved,
-  onBuyButtonClicked,
-  onFavoriteButtonClicked,
 }: {
   pageName: string;
   courseInfo: Course;
-  onItemRemoved: (pageName: string, courseId: number) => void;
-  onBuyButtonClicked: (courseId: number, clicked: boolean) => void;
-  onFavoriteButtonClicked: (courseId: number, clicked: boolean) => void;
+  onItemRemoved: (courseId: number) => void;
 }) {
   const theme = useTheme();
 
@@ -46,10 +42,7 @@ export default function CourseCard({
         padding: "0 16px 16px 16px",
       }}
     >
-      <BuyButton
-        courseId={courseInfo.id}
-        onBuyButtonClicked={onBuyButtonClicked}
-      />
+      <BuyButton courseId={courseInfo.id} />
       <Box
         sx={{
           "& > *": {
@@ -57,10 +50,7 @@ export default function CourseCard({
           },
         }}
       >
-        <FavoriteButton
-          courseId={courseInfo.id}
-          onFavoriteButtonClicked={onFavoriteButtonClicked}
-        />
+        <FavoriteButton courseId={courseInfo.id} />
         <IconButton aria-label="share" disableRipple sx={{ padding: 0 }}>
           <ShareIcon
             sx={{ fontSize: "35px", color: theme.palette.action.disabled }}
@@ -167,7 +157,7 @@ export default function CourseCard({
           </Typography>
         </Box>
       </CardContent>
-      {pageName.toLowerCase() === "home" ? <BuyActions /> : <RemoveAction />}
+      {pageName?.toLowerCase() === "home" ? <BuyActions /> : <RemoveAction />}
     </StyledCard>
   );
 }

@@ -5,17 +5,13 @@ import CourseCard from "./CourseCard";
 interface CoursesListProps {
   pageName: string;
   courses: Course[];
-  handleItemRemoved: (pageName: string, courseId: number) => void;
-  handleBuyButtonClicked: (courseId: number, clicked: boolean) => void;
-  handleFavoriteButtonClicked: (courseId: number, clicked: boolean) => void;
+  handleItemRemoved: (courseId: number) => void;
 }
 
 export default function CoursesList({
   pageName,
   courses,
   handleItemRemoved,
-  handleBuyButtonClicked,
-  handleFavoriteButtonClicked,
 }: CoursesListProps) {
   const isNarrowScreen = useMediaQuery("(max-width:1200px)");
   const columns = isNarrowScreen ? 6 : 4;
@@ -29,8 +25,6 @@ export default function CoursesList({
               pageName={pageName}
               courseInfo={course}
               onItemRemoved={handleItemRemoved}
-              onBuyButtonClicked={handleBuyButtonClicked}
-              onFavoriteButtonClicked={handleFavoriteButtonClicked}
             />
           </Grid>
         ))}

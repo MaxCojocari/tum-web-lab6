@@ -7,3 +7,8 @@ export interface Course {
   price: number;
   img_id: string;
 }
+
+export interface SortCriteria {
+  price: boolean;
+  popularity: boolean;
+}

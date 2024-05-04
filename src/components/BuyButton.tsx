@@ -1,7 +1,8 @@
 import { styled, Button, ButtonProps } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { CourseContext } from "../pages/Home";
 
 interface StyledButtonProps extends ButtonProps {
   startIcon: any;
@@ -22,18 +23,13 @@ const StyledButton = styled(Button)<StyledButtonProps>(
   })
 );
 
-export default function BuyButton({
-  courseId,
-  onBuyButtonClicked,
-}: {
-  courseId: number;
-  onBuyButtonClicked: (courseId: number, clicked: boolean) => void;
-}) {
-  const [clicked, setClicked] = useState(false);
+export default function BuyButton({ courseId }: { courseId: number }) {
+  const { cart, handleBuyButtonClicked } = useContext(CourseContext);
+  const [clicked, setClicked] = useState(cart.includes(courseId));
 
   function handleClick() {
+    handleBuyButtonClicked(courseId, !clicked);
     setClicked(!clicked);
-    onBuyButtonClicked(courseId, !clicked);
   }
 
   return (

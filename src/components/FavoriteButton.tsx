@@ -1,21 +1,17 @@
 import { IconButton, useTheme } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { CourseContext } from "../pages/Home";
 
-export default function FavoriteButton({
-  courseId,
-  onFavoriteButtonClicked,
-}: {
-  courseId: number;
-  onFavoriteButtonClicked: (courseId: number, clicked: boolean) => void;
-}) {
+export default function FavoriteButton({ courseId }: { courseId: number }) {
   const theme = useTheme();
-  const [clicked, setClicked] = useState(false);
+  const { favorite, handleFavoriteButtonClicked } = useContext(CourseContext);
+  const [clicked, setClicked] = useState(favorite.includes(courseId));
 
   function handleClick() {
     setClicked(!clicked);
-    onFavoriteButtonClicked(courseId, !clicked);
+    handleFavoriteButtonClicked(courseId, !clicked);
   }
 
   return (
@@ -32,7 +28,7 @@ export default function FavoriteButton({
         },
       }}
     >
-      {clicked === true ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+      {clicked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
     </IconButton>
   );
 }
