@@ -43,7 +43,7 @@ export function Sidebar({
   const navigate = useNavigate();
 
   const CartButton = ({ to, nrItems }: any) => (
-    <ListItemButton onClick={() => navigate(to)}>
+    <ListItemButton onClick={() => navigate(to)} disableRipple>
       <Badge badgeContent={nrItems} color="error" sx={{ marginRight: "15px" }}>
         <ShoppingCartCheckoutIcon />
       </Badge>
@@ -53,7 +53,7 @@ export function Sidebar({
   );
 
   const FavoriteButton = ({ to, nrItems }: any) => (
-    <ListItemButton onClick={() => navigate(to)}>
+    <ListItemButton onClick={() => navigate(to)} disableRipple>
       <Badge badgeContent={nrItems} color="error" sx={{ marginRight: "15px" }}>
         <FavoriteBorderIcon />
       </Badge>
@@ -62,7 +62,7 @@ export function Sidebar({
   );
 
   const HomeButton = ({ to }: any) => (
-    <ListItemButton onClick={() => navigate(to)}>
+    <ListItemButton onClick={() => navigate(to)} disableRipple>
       <HomeIcon sx={{ marginRight: "15px" }} />
       <ListItemText primary={"Home"} />
     </ListItemButton>
@@ -74,7 +74,7 @@ export function Sidebar({
         <HomeButton to="/" />
         <FavoriteButton to="/favorite" nrItems={nrItemsFavorite} />
         <CartButton to="/cart" nrItems={nrItemsCart} />
-        <ListItemButton onClick={(e) => setOpen(!open)}>
+        <ListItemButton onClick={(e) => setOpen(!open)} disableRipple>
           <FilterAltIcon sx={{ marginRight: "15px" }} />
           <ListItemText primary="Filter Courses" />
           {open ? <ExpandLess /> : <ExpandMore />}

@@ -20,6 +20,7 @@ export default function Cart({ mode, setMode }: any) {
     price: false,
     popularity: false,
   });
+  const [loading, setLoading] = useState(true);
   const { cart, favorite, setCart } = useContext(AppContext);
 
   function handlePriceCheckboxChange(isChecked: boolean) {
@@ -44,14 +45,7 @@ export default function Cart({ mode, setMode }: any) {
     setCart(ids);
   }
 
-  useEffect(() => {
-    const storedIds = localStorage.getItem(CART_LABEL);
-    setCart(storedIds ? JSON.parse(storedIds) : []);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    const storedIds = localStorage.getItem(CART_LABEL);
+  function syncCourses(storedIds: string | null) {
     if (storedIds) {
       const courseIds = JSON.parse(storedIds);
       const filteredCourses = courseIds
@@ -59,6 +53,20 @@ export default function Cart({ mode, setMode }: any) {
         .filter((course: Course) => course !== undefined);
       setCourses(sortCourses(filteredCourses, sortCriteria));
     }
+  }
+  useEffect(() => {
+    setLoading(true);
+    const storedIds = localStorage.getItem(CART_LABEL);
+    setCart(storedIds ? JSON.parse(storedIds) : []);
+    syncCourses(storedIds);
+    setLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const storedIds = localStorage.getItem(CART_LABEL);
+    syncCourses(storedIds);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cart, sortCriteria]);
 
   return (
@@ -93,7 +101,7 @@ export default function Cart({ mode, setMode }: any) {
           />
         </Grid>
       </Grid>
-      <Footer />
+      {!loading && <Footer />}
     </Box>
   );
 }

@@ -35,6 +35,7 @@ export default function Home({ mode, setMode }: any) {
     price: false,
     popularity: false,
   });
+  const [loading, setLoading] = useState(true);
   const { cart, favorite, setCart, setFavorite } = useContext(AppContext);
 
   function handlePriceCheckboxChange(isChecked: boolean) {
@@ -76,6 +77,7 @@ export default function Home({ mode, setMode }: any) {
   }
 
   useEffect(() => {
+    setLoading(true);
     const bruteCartIds = localStorage.getItem(CART_LABEL);
     const cartIds = bruteCartIds ? JSON.parse(bruteCartIds) : [];
     const bruteFavoriteIds = localStorage.getItem(FAVORITE_LABEL);
@@ -83,6 +85,7 @@ export default function Home({ mode, setMode }: any) {
     setCourses(COURSES);
     setCart(cartIds);
     setFavorite(favoriteIds);
+    setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -104,41 +107,44 @@ export default function Home({ mode, setMode }: any) {
   return (
     <Box>
       <Navbar setMode={setMode} mode={mode} />
-      <CourseContext.Provider
-        value={{
-          cart,
-          favorite,
-          handleBuyButtonClicked,
-          handleFavoriteButtonClicked,
-        }}
-      >
-        <Grid container spacing={3} sx={{ padding: "90px 90px 0px 90px" }}>
-          <Grid item xs={columns}>
-            <Sidebar
-              nrItemsCart={cart?.length}
-              nrItemsFavorite={favorite?.length}
-              onPriceCheckboxChange={handlePriceCheckboxChange}
-              onPopularityCheckboxChange={handlePopularityCheckboxChange}
-            />
+
+      <>
+        <CourseContext.Provider
+          value={{
+            cart,
+            favorite,
+            handleBuyButtonClicked,
+            handleFavoriteButtonClicked,
+          }}
+        >
+          <Grid container spacing={3} sx={{ padding: "90px 90px 0px 90px" }}>
+            <Grid item xs={columns}>
+              <Sidebar
+                nrItemsCart={cart?.length}
+                nrItemsFavorite={favorite?.length}
+                onPriceCheckboxChange={handlePriceCheckboxChange}
+                onPopularityCheckboxChange={handlePopularityCheckboxChange}
+              />
+            </Grid>
+            <Grid item xs={12 - columns}>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontFamily: "Poppins, sans-serif",
+                  fontWeight: "bold",
+                  fontSize: "40px",
+                  color: theme.palette.mode === "light" ? "#141e32" : "#fff",
+                  margin: "-16px 0 20px 0",
+                }}
+              >
+                Home
+              </Typography>
+              {CourseListMemoized}
+            </Grid>
           </Grid>
-          <Grid item xs={12 - columns}>
-            <Typography
-              variant="h6"
-              sx={{
-                fontFamily: "Poppins, sans-serif",
-                fontWeight: "bold",
-                fontSize: "40px",
-                color: theme.palette.mode === "light" ? "#141e32" : "#fff",
-                margin: "-16px 0 20px 0",
-              }}
-            >
-              Home
-            </Typography>
-            {CourseListMemoized}
-          </Grid>
-        </Grid>
-      </CourseContext.Provider>
-      <Footer />
+        </CourseContext.Provider>
+        {!loading && <Footer />}
+      </>
     </Box>
   );
 }

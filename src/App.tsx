@@ -75,13 +75,11 @@ function App() {
           <Route path="/" element={<Home mode={mode} setMode={setMode} />} />
           <Route
             path="/favorite"
-            element={
-              <Favorite mode={mode} setMode={setMode} pageName="Favorite" />
-            }
+            element={<Favorite mode={mode} setMode={setMode} />}
           />
           <Route
             path="/cart"
-            element={<Cart mode={mode} setMode={setMode} pageName="Cart" />}
+            element={<Cart mode={mode} setMode={setMode} />}
           />
         </Routes>
       </AppContext.Provider>
