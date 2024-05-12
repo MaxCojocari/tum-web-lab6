@@ -3,10 +3,9 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { Sidebar } from "../components/Sidebar";
 import CoursesList from "../components/CoursesList";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { Course, SortCriteria } from "../types";
 import { COURSES } from "../database";
-import React from "react";
 import { sortCourses } from "../utils";
 import { CART_LABEL, FAVORITE_LABEL } from "../constants";
 import { AppContext } from "../App";
@@ -18,7 +17,7 @@ interface CourseContextType {
   handleFavoriteButtonClicked: (courseId: number, clicked: boolean) => void;
 }
 
-export const CourseContext = React.createContext<CourseContextType>({
+export const CourseContext = createContext<CourseContextType>({
   cart: [],
   favorite: [],
   handleBuyButtonClicked: () => {},

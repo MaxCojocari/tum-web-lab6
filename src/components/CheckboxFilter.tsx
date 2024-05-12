@@ -1,5 +1,5 @@
 import { Box, Checkbox, Typography } from "@mui/material";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 interface CheckboxFilterProps {
   text: string;
@@ -12,7 +12,7 @@ export default function CheckboxFilter({
 }: CheckboxFilterProps) {
   const [checked, setChecked] = useState(false);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.target.checked;
     setChecked(isChecked);
     onCheckboxChange(isChecked);

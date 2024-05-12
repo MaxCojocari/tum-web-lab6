@@ -1,4 +1,10 @@
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useMemo,
+  useState,
+} from "react";
 import {
   createTheme,
   CssBaseline,
@@ -25,7 +31,7 @@ interface AppContextType {
   setPermissionsCollapsibleOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export const AppContext = React.createContext<AppContextType>({
+export const AppContext = createContext<AppContextType>({
   cart: [],
   favorite: [],
   sortCriteriaCollapsibleOpen: false,

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -12,10 +12,12 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import CheckboxFilter from "./CheckboxFilter";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import { AppContext } from "../App";
+import { generateToken } from "../services/auth.service";
 
 const StyledButton = styled(Button)(({ theme }: any) => ({
   backgroundColor: "#545be8",
   ...theme.typography.body2,
+  height: "35px",
   color: "white",
   "&:hover": {
     backgroundColor: "#545be8",
@@ -26,6 +28,56 @@ const StyledButton = styled(Button)(({ theme }: any) => ({
 export default function CollapsiblePermission() {
   const { permissionsCollapsibleOpen, setPermissionsCollapsibleOpen } =
     useContext(AppContext);
+  const [permissions, setPermissions] = useState<string[]>([]);
+
+  function handleReadCheckboxChange(isChecked: boolean) {
+    if (isChecked) {
+      setPermissions([...permissions, "READ"]);
+    } else {
+      if (permissions) {
+        setPermissions(permissions.filter((item) => item !== "READ"));
+      }
+    }
+  }
+
+  function handleWriteCheckboxChange(isChecked: boolean) {
+    if (isChecked) {
+      setPermissions([...permissions, "WRITE"]);
+    } else {
+      if (permissions) {
+        setPermissions(permissions.filter((item) => item !== "WRITE"));
+      }
+    }
+  }
+
+  function handleUpdateCheckboxChange(isChecked: boolean) {
+    if (isChecked) {
+      setPermissions([...permissions, "UPDATE"]);
+    } else {
+      if (permissions) {
+        setPermissions(permissions.filter((item) => item !== "UPDATE"));
+      }
+    }
+  }
+
+  function handleDeleteCheckboxChange(isChecked: boolean) {
+    if (isChecked) {
+      setPermissions([...permissions, "DELETE"]);
+    } else {
+      if (permissions) {
+        setPermissions(permissions.filter((item) => item !== "DELETE"));
+      }
+    }
+    console.log(permissions);
+  }
+
+  function requestJwt() {
+    generateToken({ permissions });
+  }
+
+  useEffect(() => {
+    console.log(permissions);
+  }, [permissions]);
 
   return (
     <>
@@ -45,12 +97,26 @@ export default function CollapsiblePermission() {
           disablePadding
           sx={{ margin: "0 20px 10px 20px" }}
         >
-          <CheckboxFilter text="Read" onCheckboxChange={() => {}} />
-          <CheckboxFilter text="Write" onCheckboxChange={() => {}} />
-          <CheckboxFilter text="Update" onCheckboxChange={() => {}} />
-          <CheckboxFilter text="Delete" onCheckboxChange={() => {}} />
+          <CheckboxFilter
+            text="Read"
+            onCheckboxChange={handleReadCheckboxChange}
+          />
+          <CheckboxFilter
+            text="Write"
+            onCheckboxChange={handleWriteCheckboxChange}
+          />
+          <CheckboxFilter
+            text="Update"
+            onCheckboxChange={handleUpdateCheckboxChange}
+          />
+          <CheckboxFilter
+            text="Delete"
+            onCheckboxChange={handleDeleteCheckboxChange}
+          />
           <Box sx={{ display: "flex", alignContents: "center" }}>
-            <StyledButton variant="contained">GET PERMISSION</StyledButton>
+            <StyledButton variant="contained" onClick={requestJwt}>
+              GET PERMISSION
+            </StyledButton>
           </Box>
         </List>
       </Collapse>
