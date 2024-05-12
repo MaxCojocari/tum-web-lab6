@@ -14,11 +14,12 @@ export default function ThemeToggle({ setMode, mode }: any) {
           fontSize: "30px",
         },
       }}
+      disableRipple
     >
       {theme.palette.mode === "dark" ? (
-        <Brightness7Icon />
+        <Brightness7Icon sx={{ fontSize: "30px" }} />
       ) : (
-        <Brightness4Icon sx={{ color: "action.active" }} />
+        <Brightness4Icon sx={{ color: "action.active", fontSize: "30px" }} />
       )}
     </IconButton>
   );

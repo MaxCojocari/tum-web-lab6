@@ -1,20 +1,11 @@
 import { styled } from "@mui/material/styles";
-import { useState } from "react";
-import {
-  Badge,
-  Collapse,
-  List,
-  ListItemButton,
-  ListItemText,
-  Paper,
-} from "@mui/material";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { Badge, ListItemButton, ListItemText, Paper } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import { useNavigate } from "react-router-dom";
-import CheckboxFilter from "./CheckboxFilter";
+import CollapsibleSortCriteria from "./CollapsibleSortCriteria";
+import CollapsiblePermission from "./CollapsiblePermissions";
 
 const StyledSidebar = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -39,7 +30,6 @@ export function Sidebar({
   onPriceCheckboxChange: (isChecked: boolean) => void;
   onPopularityCheckboxChange: (isChecked: boolean) => void;
 }) {
-  const [open, setOpen] = useState(true);
   const navigate = useNavigate();
 
   const CartButton = ({ to, nrItems }: any) => (
@@ -74,27 +64,12 @@ export function Sidebar({
         <HomeButton to="/" />
         <FavoriteButton to="/favorite" nrItems={nrItemsFavorite} />
         <CartButton to="/cart" nrItems={nrItemsCart} />
-        <ListItemButton onClick={(e) => setOpen(!open)} disableRipple>
-          <FilterAltIcon sx={{ marginRight: "15px" }} />
-          <ListItemText primary="Filter Courses" />
-          {open ? <ExpandLess /> : <ExpandMore />}
-        </ListItemButton>
-        <Collapse in={open} timeout="auto" unmountOnExit>
-          <List
-            component="div"
-            disablePadding
-            sx={{ margin: "0 20px 10px 20px" }}
-          >
-            <CheckboxFilter
-              text="Price"
-              onCheckboxChange={onPriceCheckboxChange}
-            />
-            <CheckboxFilter
-              text="Popularity"
-              onCheckboxChange={onPopularityCheckboxChange}
-            />
-          </List>
-        </Collapse>
+
+        <CollapsibleSortCriteria
+          onPriceCheckboxChange={onPriceCheckboxChange}
+          onPopularityCheckboxChange={onPopularityCheckboxChange}
+        />
+        <CollapsiblePermission />
       </StyledSidebar>
     </>
   );

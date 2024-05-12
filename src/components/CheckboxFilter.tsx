@@ -34,6 +34,7 @@ export default function CheckboxFilter({
             color: "#545be8",
           },
         }}
+        disableRipple
       />
       <Typography
         sx={{ display: "flex", alignItems: "center", fontWeight: "300" }}
