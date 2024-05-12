@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import {
   createTheme,
   CssBaseline,
@@ -17,20 +17,32 @@ import React from "react";
 interface AppContextType {
   cart: number[];
   favorite: number[];
-  setCart: React.Dispatch<React.SetStateAction<number[]>>;
-  setFavorite: React.Dispatch<React.SetStateAction<number[]>>;
+  sortCriteriaCollapsibleOpen: boolean;
+  permissionsCollapsibleOpen: boolean;
+  setCart: Dispatch<SetStateAction<number[]>>;
+  setFavorite: Dispatch<SetStateAction<number[]>>;
+  setSortCriteriaCollapsibleOpen: Dispatch<SetStateAction<boolean>>;
+  setPermissionsCollapsibleOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export const AppContext = React.createContext<AppContextType>({
   cart: [],
   favorite: [],
+  sortCriteriaCollapsibleOpen: false,
+  permissionsCollapsibleOpen: false,
   setCart: () => {},
   setFavorite: () => {},
+  setSortCriteriaCollapsibleOpen: () => {},
+  setPermissionsCollapsibleOpen: () => {},
 });
 
 function App() {
   const [mode, setMode] = useState<"light" | "dark">("light");
   const [cart, setCart] = useState<number[]>([]);
+  const [sortCriteriaCollapsibleOpen, setSortCriteriaCollapsibleOpen] =
+    useState(false);
+  const [permissionsCollapsibleOpen, setPermissionsCollapsibleOpen] =
+    useState(false);
   const [favorite, setFavorite] = useState<number[]>([]);
 
   const getDesignTokens = (mode: PaletteMode): ThemeOptions => ({
@@ -70,7 +82,18 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppContext.Provider value={{ cart, favorite, setCart, setFavorite }}>
+      <AppContext.Provider
+        value={{
+          cart,
+          favorite,
+          sortCriteriaCollapsibleOpen,
+          permissionsCollapsibleOpen,
+          setCart,
+          setFavorite,
+          setSortCriteriaCollapsibleOpen,
+          setPermissionsCollapsibleOpen,
+        }}
+      >
         <Routes>
           <Route path="/" element={<Home mode={mode} setMode={setMode} />} />
           <Route

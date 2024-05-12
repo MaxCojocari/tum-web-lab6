@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext } from "react";
 import {
   Box,
   Button,
@@ -11,6 +11,7 @@ import {
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import CheckboxFilter from "./CheckboxFilter";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
+import { AppContext } from "../App";
 
 const StyledButton = styled(Button)(({ theme }: any) => ({
   backgroundColor: "#545be8",
@@ -23,16 +24,22 @@ const StyledButton = styled(Button)(({ theme }: any) => ({
 }));
 
 export default function CollapsiblePermission() {
-  const [open, setOpen] = useState(true);
+  const { permissionsCollapsibleOpen, setPermissionsCollapsibleOpen } =
+    useContext(AppContext);
 
   return (
     <>
-      <ListItemButton onClick={(e) => setOpen(!open)} disableRipple>
+      <ListItemButton
+        onClick={(e) =>
+          setPermissionsCollapsibleOpen(!permissionsCollapsibleOpen)
+        }
+        disableRipple
+      >
         <HowToRegIcon sx={{ marginRight: "15px" }} />
         <ListItemText primary="Grant Permission" />
-        {open ? <ExpandLess /> : <ExpandMore />}
+        {permissionsCollapsibleOpen ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
+      <Collapse in={permissionsCollapsibleOpen} timeout="auto" unmountOnExit>
         <List
           component="div"
           disablePadding

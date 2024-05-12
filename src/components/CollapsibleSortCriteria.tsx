@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useContext } from "react";
 import { Collapse, List, ListItemButton, ListItemText } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import CheckboxFilter from "./CheckboxFilter";
+import { AppContext } from "../App";
 
 export default function CollapsibleSortCriteria({
   onPriceCheckboxChange,
@@ -11,16 +12,22 @@ export default function CollapsibleSortCriteria({
   onPriceCheckboxChange: (isChecked: boolean) => void;
   onPopularityCheckboxChange: (isChecked: boolean) => void;
 }) {
-  const [open, setOpen] = useState(true);
+  const { sortCriteriaCollapsibleOpen, setSortCriteriaCollapsibleOpen } =
+    useContext(AppContext);
 
   return (
     <>
-      <ListItemButton onClick={(e) => setOpen(!open)} disableRipple>
+      <ListItemButton
+        onClick={(e) =>
+          setSortCriteriaCollapsibleOpen(!sortCriteriaCollapsibleOpen)
+        }
+        disableRipple
+      >
         <FilterAltIcon sx={{ marginRight: "15px" }} />
         <ListItemText primary="Filter Courses" />
-        {open ? <ExpandLess /> : <ExpandMore />}
+        {sortCriteriaCollapsibleOpen ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
+      <Collapse in={sortCriteriaCollapsibleOpen} timeout="auto" unmountOnExit>
         <List
           component="div"
           disablePadding
