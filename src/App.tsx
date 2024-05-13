@@ -1,4 +1,11 @@
-import { useMemo, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   createTheme,
   CssBaseline,
@@ -12,26 +19,43 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Favorite from "./pages/Favorite";
 import Cart from "./pages/Cart";
-import React from "react";
+import { CART_LABEL, FAVORITE_LABEL, PERMISSIONS_LABEL } from "./constants";
 
 interface AppContextType {
   cart: number[];
   favorite: number[];
-  setCart: React.Dispatch<React.SetStateAction<number[]>>;
-  setFavorite: React.Dispatch<React.SetStateAction<number[]>>;
+  permissions: string[];
+  sortCriteriaCollapsibleOpen: boolean;
+  permissionsCollapsibleOpen: boolean;
+  setCart: Dispatch<SetStateAction<number[]>>;
+  setFavorite: Dispatch<SetStateAction<number[]>>;
+  setPermissions: Dispatch<SetStateAction<string[]>>;
+  setSortCriteriaCollapsibleOpen: Dispatch<SetStateAction<boolean>>;
+  setPermissionsCollapsibleOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export const AppContext = React.createContext<AppContextType>({
+export const AppContext = createContext<AppContextType>({
   cart: [],
   favorite: [],
+  permissions: [],
+  sortCriteriaCollapsibleOpen: false,
+  permissionsCollapsibleOpen: false,
   setCart: () => {},
   setFavorite: () => {},
+  setPermissions: () => {},
+  setSortCriteriaCollapsibleOpen: () => {},
+  setPermissionsCollapsibleOpen: () => {},
 });
 
 function App() {
   const [mode, setMode] = useState<"light" | "dark">("light");
   const [cart, setCart] = useState<number[]>([]);
   const [favorite, setFavorite] = useState<number[]>([]);
+  const [permissions, setPermissions] = useState<string[]>([]);
+  const [sortCriteriaCollapsibleOpen, setSortCriteriaCollapsibleOpen] =
+    useState(false);
+  const [permissionsCollapsibleOpen, setPermissionsCollapsibleOpen] =
+    useState(false);
 
   const getDesignTokens = (mode: PaletteMode): ThemeOptions => ({
     palette: {
@@ -67,10 +91,32 @@ function App() {
 
   const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
 
+  useEffect(() => {
+    const storedIdsCart = localStorage.getItem(CART_LABEL);
+    const storedIdsFavorite = localStorage.getItem(FAVORITE_LABEL);
+    const storedPermissions = localStorage.getItem(PERMISSIONS_LABEL);
+    setCart(storedIdsCart ? JSON.parse(storedIdsCart) : []);
+    setFavorite(storedIdsFavorite ? JSON.parse(storedIdsFavorite) : []);
+    setPermissions(storedPermissions ? JSON.parse(storedPermissions) : []);
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppContext.Provider value={{ cart, favorite, setCart, setFavorite }}>
+      <AppContext.Provider
+        value={{
+          cart,
+          favorite,
+          permissions,
+          sortCriteriaCollapsibleOpen,
+          permissionsCollapsibleOpen,
+          setCart,
+          setFavorite,
+          setPermissions,
+          setSortCriteriaCollapsibleOpen,
+          setPermissionsCollapsibleOpen,
+        }}
+      >
         <Routes>
           <Route path="/" element={<Home mode={mode} setMode={setMode} />} />
           <Route

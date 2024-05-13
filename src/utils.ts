@@ -4,6 +4,7 @@ export function sortCourses(
   courses: Course[],
   sortCriteria: { price: boolean; popularity: boolean }
 ): Course[] {
+  if (!courses) courses = [];
   if (sortCriteria.price && sortCriteria.popularity) {
     return [...courses].sort((a, b) => {
       if (a.price !== b.price) {

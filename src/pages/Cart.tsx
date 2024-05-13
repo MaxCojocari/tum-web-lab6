@@ -1,6 +1,5 @@
 import { Box, Grid, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useState, useEffect, useContext } from "react";
-import { COURSES } from "../database";
 import { Course, SortCriteria } from "../types";
 import CoursesList from "../components/CoursesList";
 import { sortCourses } from "../utils";
@@ -9,6 +8,7 @@ import Navbar from "../components/Navbar";
 import { Sidebar } from "../components/Sidebar";
 import { CART_LABEL } from "../constants";
 import { AppContext } from "../App";
+import { fetchCoursesById } from "../services/course.service";
 
 export default function Cart({ mode, setMode }: any) {
   const theme = useTheme();
@@ -45,27 +45,37 @@ export default function Cart({ mode, setMode }: any) {
     setCart(ids);
   }
 
-  function syncCourses(storedIds: string | null) {
+  function syncCourses() {
+    const storedIds = localStorage.getItem(CART_LABEL);
     if (storedIds) {
       const courseIds = JSON.parse(storedIds);
       const filteredCourses = courseIds
-        .map((id: number) => COURSES.find((course) => course.id === id))
+        .map((id: number) => courses?.find((course) => course.id === id))
         .filter((course: Course) => course !== undefined);
       setCourses(sortCourses(filteredCourses, sortCriteria));
     }
   }
+
+  function fetchCourses() {
+    const storedIds = localStorage.getItem(CART_LABEL);
+    if (storedIds) {
+      const courseIds = JSON.parse(storedIds);
+      if (courseIds.length > 0) {
+        fetchCoursesById(courseIds).then((res) => setCourses(res?.data));
+      }
+    }
+  }
+
   useEffect(() => {
     setLoading(true);
-    const storedIds = localStorage.getItem(CART_LABEL);
-    setCart(storedIds ? JSON.parse(storedIds) : []);
-    syncCourses(storedIds);
+    fetchCourses();
+    syncCourses();
     setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    const storedIds = localStorage.getItem(CART_LABEL);
-    syncCourses(storedIds);
+    syncCourses();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cart, sortCriteria]);
 
@@ -79,6 +89,7 @@ export default function Cart({ mode, setMode }: any) {
             nrItemsFavorite={favorite?.length}
             onPriceCheckboxChange={handlePriceCheckboxChange}
             onPopularityCheckboxChange={handlePopularityCheckboxChange}
+            onJwtChanged={fetchCourses}
           />
         </Grid>
         <Grid item xs={12 - columns}>

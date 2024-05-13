@@ -1,18 +1,22 @@
 import { Box, Checkbox, Typography } from "@mui/material";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 interface CheckboxFilterProps {
   text: string;
   onCheckboxChange: (isChecked: boolean) => void;
+  cachedPermissionAllow?: boolean;
 }
 
 export default function CheckboxFilter({
   text,
   onCheckboxChange,
+  cachedPermissionAllow,
 }: CheckboxFilterProps) {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(
+    cachedPermissionAllow ? cachedPermissionAllow : false
+  );
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.target.checked;
     setChecked(isChecked);
     onCheckboxChange(isChecked);
@@ -34,6 +38,7 @@ export default function CheckboxFilter({
             color: "#545be8",
           },
         }}
+        disableRipple
       />
       <Typography
         sx={{ display: "flex", alignItems: "center", fontWeight: "300" }}

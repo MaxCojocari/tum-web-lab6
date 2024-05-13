@@ -3,13 +3,12 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { Sidebar } from "../components/Sidebar";
 import CoursesList from "../components/CoursesList";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { Course, SortCriteria } from "../types";
-import { COURSES } from "../database";
-import React from "react";
 import { sortCourses } from "../utils";
 import { CART_LABEL, FAVORITE_LABEL } from "../constants";
 import { AppContext } from "../App";
+import { fetchCourses } from "../services/course.service";
 
 interface CourseContextType {
   cart: number[];
@@ -18,7 +17,7 @@ interface CourseContextType {
   handleFavoriteButtonClicked: (courseId: number, clicked: boolean) => void;
 }
 
-export const CourseContext = React.createContext<CourseContextType>({
+export const CourseContext = createContext<CourseContextType>({
   cart: [],
   favorite: [],
   handleBuyButtonClicked: () => {},
@@ -76,13 +75,17 @@ export default function Home({ mode, setMode }: any) {
     localStorage.setItem(FAVORITE_LABEL, JSON.stringify(ids));
   }
 
+  function fetchAllCourses() {
+    fetchCourses().then((res) => setCourses(res?.data));
+  }
+
   useEffect(() => {
     setLoading(true);
     const bruteCartIds = localStorage.getItem(CART_LABEL);
     const cartIds = bruteCartIds ? JSON.parse(bruteCartIds) : [];
     const bruteFavoriteIds = localStorage.getItem(FAVORITE_LABEL);
     const favoriteIds = bruteFavoriteIds ? JSON.parse(bruteFavoriteIds) : [];
-    setCourses(COURSES);
+    fetchCourses().then((res) => setCourses(res?.data));
     setCart(cartIds);
     setFavorite(favoriteIds);
     setLoading(false);
@@ -90,7 +93,8 @@ export default function Home({ mode, setMode }: any) {
   }, []);
 
   useEffect(() => {
-    setCourses(sortCourses(COURSES, sortCriteria));
+    setCourses(sortCourses(courses, sortCriteria));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortCriteria]);
 
   const CourseListMemoized = useMemo(() => {
@@ -124,6 +128,7 @@ export default function Home({ mode, setMode }: any) {
                 nrItemsFavorite={favorite?.length}
                 onPriceCheckboxChange={handlePriceCheckboxChange}
                 onPopularityCheckboxChange={handlePopularityCheckboxChange}
+                onJwtChanged={fetchAllCourses}
               />
             </Grid>
             <Grid item xs={12 - columns}>
