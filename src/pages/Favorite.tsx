@@ -8,6 +8,7 @@ import Navbar from "../components/Navbar";
 import { Sidebar } from "../components/Sidebar";
 import { FAVORITE_LABEL } from "../constants";
 import { AppContext } from "../App";
+import { fetchCoursesById } from "../services/course.service";
 
 export default function Favorite({ mode, setMode }: any) {
   const theme = useTheme();
@@ -20,7 +21,7 @@ export default function Favorite({ mode, setMode }: any) {
     popularity: false,
   });
   const [loading, setLoading] = useState(true);
-  const { cart, favorite, setFavorite, allCourses } = useContext(AppContext);
+  const { cart, favorite, setFavorite } = useContext(AppContext);
 
   function handlePriceCheckboxChange(isChecked: boolean) {
     setSortCriteria((prevCriteria) => ({
@@ -44,29 +45,37 @@ export default function Favorite({ mode, setMode }: any) {
     setFavorite(ids);
   }
 
-  function syncCourses(storedIds: string | null) {
+  function syncCourses() {
+    const storedIds = localStorage.getItem(FAVORITE_LABEL);
     if (storedIds) {
       const courseIds = JSON.parse(storedIds);
       const filteredCourses = courseIds
-        .map((id: number) => allCourses?.find((course) => course.id === id))
+        .map((id: number) => courses?.find((course) => course.id === id))
         .filter((course: Course) => course !== undefined);
       setCourses(sortCourses(filteredCourses, sortCriteria));
     }
   }
 
+  function fetchCourses() {
+    const storedIds = localStorage.getItem(FAVORITE_LABEL);
+    if (storedIds) {
+      const courseIds = JSON.parse(storedIds);
+      fetchCoursesById(courseIds).then((res) => setCourses(res?.data));
+    }
+  }
+
   useEffect(() => {
     setLoading(true);
-    const storedIds = localStorage.getItem(FAVORITE_LABEL);
-    syncCourses(storedIds);
+    fetchCourses();
+    syncCourses();
     setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    const storedIds = localStorage.getItem(FAVORITE_LABEL);
-    syncCourses(storedIds);
+    syncCourses();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [favorite, sortCriteria, allCourses]);
+  }, [favorite, sortCriteria]);
 
   return (
     <Box>
@@ -78,6 +87,7 @@ export default function Favorite({ mode, setMode }: any) {
             nrItemsFavorite={favorite?.length}
             onPriceCheckboxChange={handlePriceCheckboxChange}
             onPopularityCheckboxChange={handlePopularityCheckboxChange}
+            onJwtChanged={fetchCourses}
           />
         </Grid>
         <Grid item xs={12 - columns}>

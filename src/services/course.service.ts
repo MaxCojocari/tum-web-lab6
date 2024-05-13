@@ -13,3 +13,14 @@ export const fetchCourses = async () => {
       console.log(e);
     });
 };
+
+export const fetchCoursesById = async (ids: number[]) => {
+  return axios
+    .get(`${API_URL}/api/v1/courses?ids=${ids.join(",")}`)
+    .then((res) => {
+      return res;
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};

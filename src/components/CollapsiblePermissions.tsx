@@ -26,11 +26,14 @@ const StyledButton = styled(Button)(({ theme }: any) => ({
   marginTop: "10px",
 }));
 
-export default function CollapsiblePermission() {
+export default function CollapsiblePermission({
+  onJwtChanged,
+}: {
+  onJwtChanged: () => void;
+}) {
   const {
     permissionsCollapsibleOpen,
     setPermissionsCollapsibleOpen,
-    fetchAllCourses,
     permissions,
     setPermissions,
   } = useContext(AppContext);
@@ -79,7 +82,7 @@ export default function CollapsiblePermission() {
     const uniquePermissions = [...new Set(permissions)];
     localStorage.setItem(PERMISSIONS_LABEL, JSON.stringify(uniquePermissions));
     await generateToken({ permissions });
-    fetchAllCourses();
+    onJwtChanged();
   }
 
   return (

@@ -24,11 +24,13 @@ export function Sidebar({
   nrItemsFavorite,
   onPriceCheckboxChange,
   onPopularityCheckboxChange,
+  onJwtChanged,
 }: {
   nrItemsCart: number;
   nrItemsFavorite: number;
   onPriceCheckboxChange: (isChecked: boolean) => void;
   onPopularityCheckboxChange: (isChecked: boolean) => void;
+  onJwtChanged: () => void;
 }) {
   const navigate = useNavigate();
 
@@ -69,7 +71,7 @@ export function Sidebar({
           onPriceCheckboxChange={onPriceCheckboxChange}
           onPopularityCheckboxChange={onPopularityCheckboxChange}
         />
-        <CollapsiblePermission />
+        <CollapsiblePermission onJwtChanged={onJwtChanged} />
       </StyledSidebar>
     </>
   );

@@ -8,6 +8,7 @@ import { Course, SortCriteria } from "../types";
 import { sortCourses } from "../utils";
 import { CART_LABEL, FAVORITE_LABEL } from "../constants";
 import { AppContext } from "../App";
+import { fetchCourses } from "../services/course.service";
 
 interface CourseContextType {
   cart: number[];
@@ -34,8 +35,7 @@ export default function Home({ mode, setMode }: any) {
     popularity: false,
   });
   const [loading, setLoading] = useState(true);
-  const { cart, favorite, setCart, setFavorite, allCourses } =
-    useContext(AppContext);
+  const { cart, favorite, setCart, setFavorite } = useContext(AppContext);
 
   function handlePriceCheckboxChange(isChecked: boolean) {
     setSortCriteria((prevCriteria) => ({
@@ -75,13 +75,17 @@ export default function Home({ mode, setMode }: any) {
     localStorage.setItem(FAVORITE_LABEL, JSON.stringify(ids));
   }
 
+  function fetchAllCourses() {
+    fetchCourses().then((res) => setCourses(res?.data));
+  }
+
   useEffect(() => {
     setLoading(true);
     const bruteCartIds = localStorage.getItem(CART_LABEL);
     const cartIds = bruteCartIds ? JSON.parse(bruteCartIds) : [];
     const bruteFavoriteIds = localStorage.getItem(FAVORITE_LABEL);
     const favoriteIds = bruteFavoriteIds ? JSON.parse(bruteFavoriteIds) : [];
-    setCourses(allCourses);
+    fetchCourses().then((res) => setCourses(res?.data));
     setCart(cartIds);
     setFavorite(favoriteIds);
     setLoading(false);
@@ -89,8 +93,9 @@ export default function Home({ mode, setMode }: any) {
   }, []);
 
   useEffect(() => {
-    setCourses(sortCourses(allCourses, sortCriteria));
-  }, [allCourses, sortCriteria]);
+    setCourses(sortCourses(courses, sortCriteria));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sortCriteria]);
 
   const CourseListMemoized = useMemo(() => {
     return (
@@ -123,6 +128,7 @@ export default function Home({ mode, setMode }: any) {
                 nrItemsFavorite={favorite?.length}
                 onPriceCheckboxChange={handlePriceCheckboxChange}
                 onPopularityCheckboxChange={handlePopularityCheckboxChange}
+                onJwtChanged={fetchAllCourses}
               />
             </Grid>
             <Grid item xs={12 - columns}>
