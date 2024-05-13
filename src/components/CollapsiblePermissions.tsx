@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import {
   Box,
   Button,
@@ -13,6 +13,7 @@ import CheckboxFilter from "./CheckboxFilter";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import { AppContext } from "../App";
 import { generateToken } from "../services/auth.service";
+import { PERMISSIONS_LABEL } from "../constants";
 
 const StyledButton = styled(Button)(({ theme }: any) => ({
   backgroundColor: "#545be8",
@@ -30,8 +31,9 @@ export default function CollapsiblePermission() {
     permissionsCollapsibleOpen,
     setPermissionsCollapsibleOpen,
     fetchAllCourses,
+    permissions,
+    setPermissions,
   } = useContext(AppContext);
-  const [permissions, setPermissions] = useState<string[]>([]);
 
   function handleReadCheckboxChange(isChecked: boolean) {
     if (isChecked) {
@@ -74,6 +76,8 @@ export default function CollapsiblePermission() {
   }
 
   async function requestJwt() {
+    const uniquePermissions = [...new Set(permissions)];
+    localStorage.setItem(PERMISSIONS_LABEL, JSON.stringify(uniquePermissions));
     await generateToken({ permissions });
     fetchAllCourses();
   }
@@ -99,18 +103,22 @@ export default function CollapsiblePermission() {
           <CheckboxFilter
             text="Read"
             onCheckboxChange={handleReadCheckboxChange}
+            cachedPermissionAllow={permissions.includes("READ")}
           />
           <CheckboxFilter
             text="Write"
             onCheckboxChange={handleWriteCheckboxChange}
+            cachedPermissionAllow={permissions.includes("WRITE")}
           />
           <CheckboxFilter
             text="Update"
             onCheckboxChange={handleUpdateCheckboxChange}
+            cachedPermissionAllow={permissions.includes("UPDATE")}
           />
           <CheckboxFilter
             text="Delete"
             onCheckboxChange={handleDeleteCheckboxChange}
+            cachedPermissionAllow={permissions.includes("DELETE")}
           />
           <Box sx={{ display: "flex", alignContents: "center" }}>
             <StyledButton variant="contained" onClick={requestJwt}>

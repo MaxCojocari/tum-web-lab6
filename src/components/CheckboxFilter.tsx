@@ -4,13 +4,17 @@ import { ChangeEvent, useState } from "react";
 interface CheckboxFilterProps {
   text: string;
   onCheckboxChange: (isChecked: boolean) => void;
+  cachedPermissionAllow?: boolean;
 }
 
 export default function CheckboxFilter({
   text,
   onCheckboxChange,
+  cachedPermissionAllow,
 }: CheckboxFilterProps) {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(
+    cachedPermissionAllow ? cachedPermissionAllow : false
+  );
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.target.checked;

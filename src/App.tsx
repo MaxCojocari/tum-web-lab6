@@ -21,16 +21,18 @@ import Favorite from "./pages/Favorite";
 import Cart from "./pages/Cart";
 import { Course } from "./types";
 import { fetchCourses } from "./services/course.service";
-import { CART_LABEL, FAVORITE_LABEL } from "./constants";
+import { CART_LABEL, FAVORITE_LABEL, PERMISSIONS_LABEL } from "./constants";
 
 interface AppContextType {
   cart: number[];
   favorite: number[];
+  permissions: string[];
   sortCriteriaCollapsibleOpen: boolean;
   permissionsCollapsibleOpen: boolean;
   allCourses: Course[];
   setCart: Dispatch<SetStateAction<number[]>>;
   setFavorite: Dispatch<SetStateAction<number[]>>;
+  setPermissions: Dispatch<SetStateAction<string[]>>;
   setSortCriteriaCollapsibleOpen: Dispatch<SetStateAction<boolean>>;
   setPermissionsCollapsibleOpen: Dispatch<SetStateAction<boolean>>;
   fetchAllCourses: () => void;
@@ -39,11 +41,13 @@ interface AppContextType {
 export const AppContext = createContext<AppContextType>({
   cart: [],
   favorite: [],
+  permissions: [],
   sortCriteriaCollapsibleOpen: false,
   permissionsCollapsibleOpen: false,
   allCourses: [],
   setCart: () => {},
   setFavorite: () => {},
+  setPermissions: () => {},
   setSortCriteriaCollapsibleOpen: () => {},
   setPermissionsCollapsibleOpen: () => {},
   fetchAllCourses: () => {},
@@ -54,6 +58,7 @@ function App() {
   const [cart, setCart] = useState<number[]>([]);
   const [favorite, setFavorite] = useState<number[]>([]);
   const [allCourses, setAllCourses] = useState<Course[]>([]);
+  const [permissions, setPermissions] = useState<string[]>([]);
   const [sortCriteriaCollapsibleOpen, setSortCriteriaCollapsibleOpen] =
     useState(false);
   const [permissionsCollapsibleOpen, setPermissionsCollapsibleOpen] =
@@ -102,8 +107,10 @@ function App() {
   useEffect(() => {
     const storedIdsCart = localStorage.getItem(CART_LABEL);
     const storedIdsFavorite = localStorage.getItem(FAVORITE_LABEL);
+    const storedPermissions = localStorage.getItem(PERMISSIONS_LABEL);
     setCart(storedIdsCart ? JSON.parse(storedIdsCart) : []);
     setFavorite(storedIdsFavorite ? JSON.parse(storedIdsFavorite) : []);
+    setPermissions(storedPermissions ? JSON.parse(storedPermissions) : []);
     fetchAllCourses();
   }, []);
 
@@ -114,11 +121,13 @@ function App() {
         value={{
           cart,
           favorite,
+          permissions,
           sortCriteriaCollapsibleOpen,
           permissionsCollapsibleOpen,
           allCourses,
           setCart,
           setFavorite,
+          setPermissions,
           setSortCriteriaCollapsibleOpen,
           setPermissionsCollapsibleOpen,
           fetchAllCourses,
