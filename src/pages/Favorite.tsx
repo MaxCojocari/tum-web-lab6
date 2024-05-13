@@ -60,7 +60,9 @@ export default function Favorite({ mode, setMode }: any) {
     const storedIds = localStorage.getItem(FAVORITE_LABEL);
     if (storedIds) {
       const courseIds = JSON.parse(storedIds);
-      fetchCoursesById(courseIds).then((res) => setCourses(res?.data));
+      if (courseIds.length > 0) {
+        fetchCoursesById(courseIds).then((res) => setCourses(res?.data));
+      }
     }
   }
 
