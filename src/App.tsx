@@ -2,6 +2,7 @@ import {
   createContext,
   Dispatch,
   SetStateAction,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -18,17 +19,21 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Favorite from "./pages/Favorite";
 import Cart from "./pages/Cart";
-import React from "react";
+import { Course } from "./types";
+import { fetchCourses } from "./services/course.service";
+import { CART_LABEL, FAVORITE_LABEL } from "./constants";
 
 interface AppContextType {
   cart: number[];
   favorite: number[];
   sortCriteriaCollapsibleOpen: boolean;
   permissionsCollapsibleOpen: boolean;
+  allCourses: Course[];
   setCart: Dispatch<SetStateAction<number[]>>;
   setFavorite: Dispatch<SetStateAction<number[]>>;
   setSortCriteriaCollapsibleOpen: Dispatch<SetStateAction<boolean>>;
   setPermissionsCollapsibleOpen: Dispatch<SetStateAction<boolean>>;
+  fetchAllCourses: () => void;
 }
 
 export const AppContext = createContext<AppContextType>({
@@ -36,20 +41,23 @@ export const AppContext = createContext<AppContextType>({
   favorite: [],
   sortCriteriaCollapsibleOpen: false,
   permissionsCollapsibleOpen: false,
+  allCourses: [],
   setCart: () => {},
   setFavorite: () => {},
   setSortCriteriaCollapsibleOpen: () => {},
   setPermissionsCollapsibleOpen: () => {},
+  fetchAllCourses: () => {},
 });
 
 function App() {
   const [mode, setMode] = useState<"light" | "dark">("light");
   const [cart, setCart] = useState<number[]>([]);
+  const [favorite, setFavorite] = useState<number[]>([]);
+  const [allCourses, setAllCourses] = useState<Course[]>([]);
   const [sortCriteriaCollapsibleOpen, setSortCriteriaCollapsibleOpen] =
     useState(false);
   const [permissionsCollapsibleOpen, setPermissionsCollapsibleOpen] =
     useState(false);
-  const [favorite, setFavorite] = useState<number[]>([]);
 
   const getDesignTokens = (mode: PaletteMode): ThemeOptions => ({
     palette: {
@@ -85,6 +93,20 @@ function App() {
 
   const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
 
+  async function fetchAllCourses() {
+    fetchCourses().then((res) => {
+      setAllCourses(res?.data);
+    });
+  }
+
+  useEffect(() => {
+    const storedIdsCart = localStorage.getItem(CART_LABEL);
+    const storedIdsFavorite = localStorage.getItem(FAVORITE_LABEL);
+    setCart(storedIdsCart ? JSON.parse(storedIdsCart) : []);
+    setFavorite(storedIdsFavorite ? JSON.parse(storedIdsFavorite) : []);
+    fetchAllCourses();
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -94,10 +116,12 @@ function App() {
           favorite,
           sortCriteriaCollapsibleOpen,
           permissionsCollapsibleOpen,
+          allCourses,
           setCart,
           setFavorite,
           setSortCriteriaCollapsibleOpen,
           setPermissionsCollapsibleOpen,
+          fetchAllCourses,
         }}
       >
         <Routes>

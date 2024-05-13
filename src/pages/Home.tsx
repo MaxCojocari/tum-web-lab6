@@ -5,7 +5,6 @@ import { Sidebar } from "../components/Sidebar";
 import CoursesList from "../components/CoursesList";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { Course, SortCriteria } from "../types";
-import { COURSES } from "../database";
 import { sortCourses } from "../utils";
 import { CART_LABEL, FAVORITE_LABEL } from "../constants";
 import { AppContext } from "../App";
@@ -35,7 +34,8 @@ export default function Home({ mode, setMode }: any) {
     popularity: false,
   });
   const [loading, setLoading] = useState(true);
-  const { cart, favorite, setCart, setFavorite } = useContext(AppContext);
+  const { cart, favorite, setCart, setFavorite, allCourses } =
+    useContext(AppContext);
 
   function handlePriceCheckboxChange(isChecked: boolean) {
     setSortCriteria((prevCriteria) => ({
@@ -81,7 +81,7 @@ export default function Home({ mode, setMode }: any) {
     const cartIds = bruteCartIds ? JSON.parse(bruteCartIds) : [];
     const bruteFavoriteIds = localStorage.getItem(FAVORITE_LABEL);
     const favoriteIds = bruteFavoriteIds ? JSON.parse(bruteFavoriteIds) : [];
-    setCourses(COURSES);
+    setCourses(allCourses);
     setCart(cartIds);
     setFavorite(favoriteIds);
     setLoading(false);
@@ -89,8 +89,8 @@ export default function Home({ mode, setMode }: any) {
   }, []);
 
   useEffect(() => {
-    setCourses(sortCourses(COURSES, sortCriteria));
-  }, [sortCriteria]);
+    setCourses(sortCourses(allCourses, sortCriteria));
+  }, [allCourses, sortCriteria]);
 
   const CourseListMemoized = useMemo(() => {
     return (

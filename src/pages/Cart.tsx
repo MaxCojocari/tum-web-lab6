@@ -1,6 +1,5 @@
 import { Box, Grid, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useState, useEffect, useContext } from "react";
-import { COURSES } from "../database";
 import { Course, SortCriteria } from "../types";
 import CoursesList from "../components/CoursesList";
 import { sortCourses } from "../utils";
@@ -21,7 +20,7 @@ export default function Cart({ mode, setMode }: any) {
     popularity: false,
   });
   const [loading, setLoading] = useState(true);
-  const { cart, favorite, setCart } = useContext(AppContext);
+  const { cart, favorite, setCart, allCourses } = useContext(AppContext);
 
   function handlePriceCheckboxChange(isChecked: boolean) {
     setSortCriteria((prevCriteria) => ({
@@ -49,15 +48,15 @@ export default function Cart({ mode, setMode }: any) {
     if (storedIds) {
       const courseIds = JSON.parse(storedIds);
       const filteredCourses = courseIds
-        .map((id: number) => COURSES.find((course) => course.id === id))
+        .map((id: number) => allCourses?.find((course) => course.id === id))
         .filter((course: Course) => course !== undefined);
       setCourses(sortCourses(filteredCourses, sortCriteria));
     }
   }
+
   useEffect(() => {
     setLoading(true);
     const storedIds = localStorage.getItem(CART_LABEL);
-    setCart(storedIds ? JSON.parse(storedIds) : []);
     syncCourses(storedIds);
     setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,7 +66,7 @@ export default function Cart({ mode, setMode }: any) {
     const storedIds = localStorage.getItem(CART_LABEL);
     syncCourses(storedIds);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cart, sortCriteria]);
+  }, [cart, sortCriteria, allCourses]);
 
   return (
     <Box>

@@ -3,7 +3,7 @@ import { API_URL } from "../config/config";
 
 axios.defaults.withCredentials = true;
 
-export const getCourses = async () => {
+export const fetchCourses = async () => {
   return axios
     .get(`${API_URL}/api/v1/courses`)
     .then((res) => {
@@ -11,6 +11,5 @@ export const getCourses = async () => {
     })
     .catch((e) => {
       console.log(e);
-      return e.response;
     });
 };

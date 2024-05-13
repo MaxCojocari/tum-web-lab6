@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import {
   Box,
   Button,
@@ -26,8 +26,11 @@ const StyledButton = styled(Button)(({ theme }: any) => ({
 }));
 
 export default function CollapsiblePermission() {
-  const { permissionsCollapsibleOpen, setPermissionsCollapsibleOpen } =
-    useContext(AppContext);
+  const {
+    permissionsCollapsibleOpen,
+    setPermissionsCollapsibleOpen,
+    fetchAllCourses,
+  } = useContext(AppContext);
   const [permissions, setPermissions] = useState<string[]>([]);
 
   function handleReadCheckboxChange(isChecked: boolean) {
@@ -68,16 +71,12 @@ export default function CollapsiblePermission() {
         setPermissions(permissions.filter((item) => item !== "DELETE"));
       }
     }
-    console.log(permissions);
   }
 
-  function requestJwt() {
-    generateToken({ permissions });
+  async function requestJwt() {
+    await generateToken({ permissions });
+    fetchAllCourses();
   }
-
-  useEffect(() => {
-    console.log(permissions);
-  }, [permissions]);
 
   return (
     <>
